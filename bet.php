@@ -200,6 +200,95 @@ function all_users() {
     return $user;
 }
 
+
+
+function create_betgroup($name) {
+    require("config.php");
+
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".betgroup (name) VALUES (:name)");
+    $statement->bindValue(':name', $name, PDO::PARAM_STR);
+    $result = $statement->execute();
+
+    return $result;
+}
+
+function delete_betgroup($betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("DELETE FROM ".$db_name.".betgroup WHERE id=:id");
+    $statement->bindValue(':id', $betgroup_id, PDO::PARAM_INT);
+    return $statement->execute();;
+}
+
+function get_betgroup_ids() {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT id FROM ".$db_name.".betgroup ORDER BY id ASC, name ASC");
+    $statement->execute();
+
+    $id_list = [];
+    foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $betgroup) {
+        $id_list[] = $betgroup['id'];
+    }
+
+    return $id_list;
+}
+
+function get_betgroups($ids) {
+    require("config.php");
+
+    $betgroups = [];
+
+    foreach ($ids as $id) {
+        $statement = $pdo->prepare("SELECT * FROM ".$db_name.".betgroup WHERE id = :id");
+        $statement->execute(array('id' => $id));
+        $betgroups[$id] = $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    return $betgroups;
+}
+
+function create_betgroup_user($user_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".betgroup_user (user_id, betgroup_id) VALUES (:user_id, :betgroup_id)");
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_STR);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_STR);
+    $result = $statement->execute();
+
+    return $result;
+}
+
+function delete_betgroup_user($user_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("DELETE FROM ".$db_name.".betgroup_user WHERE user_id=:user_id AND betgroup_id=:betgroup_id");
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
+    return $statement->execute();;
+}
+
+
+function create_betgroup_season($season_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".betgroup_season (season_id, betgroup_id) VALUES (:season_id, :betgroup_id)");
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_STR);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_STR);
+    $result = $statement->execute();
+
+    return $result;
+}
+
+function delete_betgroup_season($season_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("DELETE FROM ".$db_name.".betgroup_season WHERE season_id=:season_id AND betgroup_id=:betgroup_id");
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
+    return $statement->execute();;
+}
+
 //var_dump(create_bet(1,2,1));
 //var_dump(check_points(1,1));
 //var_dump(submitted(1,1));
@@ -207,4 +296,7 @@ function all_users() {
 //var_dump(check_matchday_submitted(1,1));
 //var_dump(sum_points_all_at_matchday(1,3));
 //var_dump(all_users());
+
+$name = "family";
+//var_dump(delete_betgroup(2));
 ?>

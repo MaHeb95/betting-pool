@@ -8,7 +8,7 @@
 
 //Tragt hier eure Verbindungsdaten zur Datenbank ein
 $db_host = 'localhost';
-$db_name = 'betting-pool';
+$db_name = 'betting_pool';
 $db_user = 'root';
 $db_password = 'root';
 $db_charset = 'utf8';

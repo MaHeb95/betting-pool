@@ -19,7 +19,7 @@ if(isset($_GET['login'])) {
     //Überprüfung des Passworts
     if ($user !== false && password_verify($password, $user['password'])) {
         $_SESSION['userid'] = $user['id'];
-        header("Location: tipps.php");
+        header("Location: start.php");
         //echo "<a href='http://$host_domain/tipps.php' class='btn btn-primary' role='button' aria-pressed='true'>Zum Tippspiel</a>";
         exit();
     } else {
