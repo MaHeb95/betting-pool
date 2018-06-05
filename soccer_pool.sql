@@ -111,3 +111,57 @@ CREATE TABLE IF NOT EXISTS `betting-pool`.`bet` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `betting-pool`.`betgroup`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `betting-pool`.`betgroup` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `betting-pool`.`betgroup-user`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `betting-pool`.`betgroup-user` (
+  `betgroup_id` INT NOT NULL,
+  `user_id` INT NOT NULL,
+  PRIMARY KEY (`betgroup_id`, `user_id`),
+  INDEX `fk_betgroup-user_betgroup1_idx` (`betgroup_id` ASC),
+  INDEX `fk_betgroup-user_user1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_betgroup-user_betgroup1`
+  FOREIGN KEY (`betgroup_id`)
+  REFERENCES `betting-pool`.`betgroup` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_betgroup-user_user1`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `betting-pool`.`user` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+  ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `betting-pool`.`betgroup-season`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `betting-pool`.`betgroup-season` (
+  `betgroup_id` INT NOT NULL,
+  `season_id` INT NOT NULL,
+  PRIMARY KEY (`betgroup_id`, `season_id`),
+  INDEX `fk_betgroup-season_betgroup1_idx` (`betgroup_id` ASC),
+  INDEX `fk_betgroup-season_season1_idx` (`season_id` ASC),
+  CONSTRAINT `fk_betgroup-season_betgroup1`
+  FOREIGN KEY (`betgroup_id`)
+  REFERENCES `betting-pool`.`betgroup` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_betgroup-season_season1`
+  FOREIGN KEY (`season_id`)
+  REFERENCES `betting-pool`.`season` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+  ENGINE = InnoDB;

@@ -33,7 +33,9 @@
 - Tippgruppen
   - Tippgruppen-ID
   - Name
-  - Saison-ID
 - Tippgruppe-User
   - Tippgruppen-ID
   - User-ID
+- Tippgruppe-Saison
+  - Tippgruppen-ID
+  - Saison-ID  
