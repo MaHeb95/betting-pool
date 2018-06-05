@@ -5,9 +5,15 @@
   - Name
   - PW
   - Email
+  - Admin
+- Saison
+  - Saison-ID
+  - Name
+  - bet_type
 - Spieltag
   - Spieltag-ID
   - Name
+  - Saison-ID
 - Spiele
   - Spiel-ID
   - URL
@@ -18,9 +24,16 @@
   - Heimtore
   - Gasttore
   - Winner
-  - (Finished)
+  - Finished
 - Tipps
   - User-ID
   - Spiel-ID
   - Tipp (0,1,2)
   - Points (int)
+- Tippgruppen
+  - Tippgruppen-ID
+  - Name
+  - Saison-ID
+- Tippgruppe-User
+  - Tippgruppen-ID
+  - User-ID
