@@ -1,0 +1,26 @@
+## Datenbank Struktur
+
+- User
+  - User-ID
+  - Name
+  - PW
+  - Email
+- Spieltag
+  - Spieltag-ID
+  - Name
+- Spiele
+  - Spiel-ID
+  - URL
+  - Spieltag-ID
+  - Anstosszeit
+  - Heimmannschaft
+  - Gastmannschaft
+  - Heimtore
+  - Gasttore
+  - Winner
+  - (Finished)
+- Tipps
+  - User-ID
+  - Spiel-ID
+  - Tipp (0,1,2)
+  - Points (int)
