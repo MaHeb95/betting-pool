@@ -69,6 +69,17 @@ function get_seasons($ids) {
     return $seasons;
 }
 
+function get_season_bettype($id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT bet_type FROM ".$db_name.".season WHERE id='".$id."'");
+    $statement->execute();
+    $bettype = $statement->fetch(PDO::FETCH_ASSOC);
+
+
+    return $bettype;
+}
+
 function create_matchday($season_id, $name, $start_time=NULL) {
     require("config.php");
 
@@ -406,6 +417,6 @@ function parse_flashscore($url) {
 
 //var_dump(get_matches(get_match_ids(1)));
 
-//var_dump(update_match(1));
+//var_dump(get_seasons(2));
 
 ?>

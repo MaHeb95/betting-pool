@@ -164,21 +164,21 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 <?php
 if(count($md_matches) > 0){
 
-if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) {?>
+if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
 <form action="<?php echo $actual_link; ?>" method="post">
     <div class="table-responsive">
         <table class="table tippabgabe">
             <thead class="thead-inverse">
-                <tr>
-                    <th class="hidden-xs-down">Anstoss</th>
-                    <th>Ansetzung</th>
-                    <?php
-                    $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
-                    $statement->execute();
-                    $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
-                    echo "<th>" . $user . "</th>";
-                    ?>
-                </tr>
+            <tr>
+                <th class="hidden-xs-down">Anstoss</th>
+                <th>Ansetzung</th>
+                <?php
+                $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
+                $statement->execute();
+                $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
+                echo "<th>" . $user . "</th>";
+                ?>
+            </tr>
             </thead>
             <tbody>
             <?php
@@ -187,41 +187,58 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) {?>
                 //echo "<td>" . $row['id'] . "</td>";
                 echo "<td class='anstoss hidden-xs-down'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
                 echo "<style>
-                        #id".$row['id'].".ansetzung:before {
-                            background-image: url(". $row['home_logo'] .");
+                        #id" . $row['id'] . ".ansetzung:before {
+                            background-image: url(" . $row['home_logo'] . ");
                         }
                   
-                        #id".$row['id'].".ansetzung:after {
-                            background-image: url(". $row['guest_logo'] .");
+                        #id" . $row['id'] . ".ansetzung:after {
+                            background-image: url(" . $row['guest_logo'] . ");
                         }
                         </style>";
-                echo "<td id='id".$row['id']."' class='ansetzung'>
-                            <div class='ansetzung-text'>". $row['home_team'] . " - " . $row['guest_team'] . "</div>
+                echo "<td id='id" . $row['id'] . "' class='ansetzung'>
+                            <div class='ansetzung-text'>" . $row['home_team'] . " - " . $row['guest_team'] . "</div>
                           </td>";
-                echo "<td>" ?>
+                echo "<td>";
 
-                <input type="number" class="form-control tippfeld" name="<?php echo $row['id']; ?>" list="possibleBets" placeholder="" step="1" min="0" max="2" value=""
-                    <?php if ($row['start'] < 0) {echo "disabled";}?>>
-                    <?php //!!! bet INPUT
+                $season = get_season_bettype($seasonmenu);
+                if ($season['bet_type'] == 'winner') { //!!! bet INPUT ?>
+                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
+                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
+                        <?php if ($row['start'] < 0) {
+                            echo "disabled";
+                        } ?>>
+                <?php } elseif ($season['bet_type'] == 'result' OR $season['bet_type'] == 'result90') { ?>
+                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
+                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
+                        <?php if ($row['start'] < 0) {
+                            echo "disabled";
+                        } ?>>
+                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
+                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
+                        <?php if ($row['start'] < 0) {
+                            echo "disabled";
+                        } ?>>
+                <?php }
+
                 echo "</td>";
                 echo "</tr>";
             }
             echo "</tbody>";
-        echo "</table>";
-    echo "</div>";
-    echo "<div class='col-md-3 col-md-offset-9'>";
-        echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>";
-    echo "</div>";
-echo "</form>";
+            echo "</table>";
+            echo "</div>";
+            echo "<div class='col-md-3 col-md-offset-9'>";
+            echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>";
+            echo "</div>";
+            echo "</form>";
 
-?>
+            ?>
 
-<script>
-    function confirmFunction() {
-        alert("Wollen Sie die Tipps endgültig abgeben?");
-    }
-</script>  <?php
-
+            <script>
+                function confirmFunction() {
+                    alert("Wollen Sie die Tipps endgültig abgeben?");
+                }
+            </script> <?php
+            
 }
 else {
 ?>
