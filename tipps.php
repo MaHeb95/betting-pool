@@ -208,38 +208,27 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                             echo "disabled";
                         } ?>>
                 <?php } elseif ($season['bet_type'] == 'result' OR $season['bet_type'] == 'result90') { ?>
-                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
-                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
-                        <?php if ($row['start'] < 0) {
-                            echo "disabled";
-                        } ?>>
-                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
-                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
-                        <?php if ($row['start'] < 0) {
-                            echo "disabled";
-                        } ?>>
+                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>' list='possibleBets' placeholder='' step='1' min='0' max='2' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
+                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>' list='possibleBets' placeholder='' step='1' min='0' max='2' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
                 <?php }
 
                 echo "</td>";
                 echo "</tr>";
-            }
-            echo "</tbody>";
-            echo "</table>";
-            echo "</div>";
-            echo "<div class='col-md-3 col-md-offset-9'>";
-            echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>";
-            echo "</div>";
-            echo "</form>";
+            } ?>
+            </tbody>
+        </table>
+    </div>
+    <div class='col-md-3 col-md-offset-9'>
+        <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+    </div>
+</form>
+    <script>
+        function confirmFunction() {
+            alert("Wollen Sie die Tipps endgültig abgeben?");
+        }
+    </script>
 
-            ?>
-
-            <script>
-                function confirmFunction() {
-                    alert("Wollen Sie die Tipps endgültig abgeben?");
-                }
-            </script> <?php
-            
-}
+<?php }
 else {
 ?>
 <div class="table-responsive">
