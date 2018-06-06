@@ -69,6 +69,16 @@ function get_seasons($ids) {
     return $seasons;
 }
 
+function all_seasons() {
+    require ("config.php");
+
+    $statement = $pdo->prepare("SELECT * FROM " . $db_name . ".season ");
+    $statement->execute();
+    $seasons = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+    return $seasons;
+}
+
 function get_season_bettype($id) {
     require("config.php");
 

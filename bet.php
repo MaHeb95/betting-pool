@@ -286,8 +286,8 @@ function create_betgroup_user($user_id, $betgroup_id) {
     require("config.php");
 
     $statement = $pdo->prepare("INSERT INTO ".$db_name.".betgroup_user (user_id, betgroup_id) VALUES (:user_id, :betgroup_id)");
-    $statement->bindValue(':user_id', $user_id, PDO::PARAM_STR);
-    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_STR);
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
     $result = $statement->execute();
 
     return $result;
@@ -307,8 +307,8 @@ function create_betgroup_season($season_id, $betgroup_id) {
     require("config.php");
 
     $statement = $pdo->prepare("INSERT INTO ".$db_name.".betgroup_season (season_id, betgroup_id) VALUES (:season_id, :betgroup_id)");
-    $statement->bindValue(':season_id', $season_id, PDO::PARAM_STR);
-    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_STR);
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
     $result = $statement->execute();
 
     return $result;
@@ -321,6 +321,36 @@ function delete_betgroup_season($season_id, $betgroup_id) {
     $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
     $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
     return $statement->execute();;
+}
+
+function check_betgroup_user($user_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT * FROM ".$db_name.".betgroup_user WHERE user_id=:user_id AND betgroup_id=:betgroup_id");
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
+    $statement->execute();
+    $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) { $result=NULL; }
+    else { $result= TRUE; }
+
+    return $result;
+}
+
+function check_betgroup_season($season_id, $betgroup_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT * FROM ".$db_name.".betgroup_season WHERE season_id=:season_id AND betgroup_id=:betgroup_id");
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
+    $statement->execute();
+    $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) { $result=NULL; }
+    else { $result= TRUE; }
+
+    return $result;
 }
 
 //var_dump(create_bet(1,2,1));
