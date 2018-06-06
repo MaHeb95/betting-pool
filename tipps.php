@@ -24,11 +24,15 @@ $is_admin = (bool) (get_user($userid)['admin']);
 
 $seasonmenu = null;
 $matchdaymenu = null;
+$betgroupmenu = null;
 if (isset($_GET["season"]) && is_numeric($_GET["season"])) {
     $seasonmenu = $_GET["season"];
 }
 if (isset($_GET['matchday']) && is_numeric($_GET['matchday'])) {
     $matchdaymenu = $_GET['matchday'];
+}
+if (isset($_GET['betgroup']) && is_numeric($_GET['betgroup'])) {
+    $betgroupmenu = $_GET['betgroup'];
 }
 
 $md_matches = null;
@@ -104,6 +108,21 @@ foreach (all_users() AS $user) {
                 }
             }
         }
+
+        function autoSubmit_betgroup()
+        {
+            with (window.document.form) {
+                /**
+                 * We have if and else block where we check the selected index for Seasonegory(season) and * accordingly we change the URL in the browser.
+                 */
+                if (betgroup.selectedIndex === 0) {
+                    window.location.href = 'tipps.php?season=' + season.options[season.selectedIndex].value + '&matchday=' + matchday.options[matchday.selectedIndex].value;
+                } else {
+                    window.location.href = 'tipps.php?season=' + season.options[season.selectedIndex].value + '&matchday=' + matchday.options[matchday.selectedIndex].value + '&betgroup=' + betgroup.options[betgroup.selectedIndex].value;
+                }
+            }
+        }
+
         function to_tippsadmin()
         {
             with (window.document.form) {
@@ -165,6 +184,25 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                             </p>
                         </div>
                         <?php
+                        $matches = get_match_ids($matchdaymenu);
+                        if (count($matches) > 0) { ?>
+                            <div class="col col-lg-3">
+                                <p class="bg">
+                                    <!-- <label for="betgroup">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
+                                    <!--onChange event fired and function autoSubmit() is invoked-->
+                                    <select class="form-control" id="betgroup" name="betgroup" onchange="autoSubmit_betgroup();">
+                                        <option value="">-- Wähle eine Tipprunde --</option>
+                                        <?php
+                                        $betgroups = get_betgroups_from_user($userid);
+                                        foreach ($betgroups as $row) {
+                                            echo("<option value=\"{$row['id']}\" " . ($betgroupmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
+                                        }
+                                        ?>
+                                    </select>
+                                </p>
+                            </div>
+                            <?php
+                        }
                     }
                 }
                 ?>
@@ -252,8 +290,7 @@ else {
         <th>Ansetzung</th>
         <th>Ergebnis</th>
         <?php
-        $statement = ("SELECT * FROM " . $db_name . ".user ");
-        foreach (all_users() as $row) {
+        foreach (get_user_from_betgroup($betgroupmenu) as $row) {
             echo "<th>" . $row['username'] . "</th>";
         }
         ?>
@@ -283,7 +320,7 @@ else {
             echo "<td></td>";
         }
 
-        foreach (all_users() as $user) {
+        foreach (get_user_from_betgroup($betgroupmenu) as $user) {
             $bet = get_bet($user['id'],$row['id']);
             if ($bet === NULL){
                 echo "<td>-</td>";
@@ -314,7 +351,7 @@ else {
     }
     echo "<tr class='active' >";
     echo "<td class='summary' colspan='3'>Punkte Spieltag:</td>";
-        foreach (all_users() as $user) {
+        foreach (get_user_from_betgroup($betgroupmenu) as $user) {
             echo "<td><strong>" . sum_points_matchday($user['id'],$matchdaymenu) . "</strong></td>";
         }
     echo "</tr>";
@@ -324,7 +361,7 @@ else {
 
     $user_ids = [];
     $total_points = [];
-    foreach (all_users() as $user) {
+    foreach (get_user_from_betgroup($betgroupmenu) as $user) {
         $user_ids[] = $user['id'];
         $total_points[] = sum_points_all_at_matchday($user['id'],$matchdaymenu);
         echo "<td><strong>" . sum_points_all_at_matchday($user['id'],$matchdaymenu) . "</strong></td>";
@@ -350,7 +387,7 @@ else {
     echo "<tr class='active' >";
     echo "<td class='summary' colspan='3'>Platz:</td>";
 
-    foreach (all_users() as $user) {
+    foreach (get_user_from_betgroup($betgroupmenu) as $user) {
         echo "<td><strong>" . $ranks[$user['id']] . "</strong></td>";
     }
     echo "</tr>";

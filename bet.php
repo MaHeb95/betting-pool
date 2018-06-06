@@ -234,6 +234,30 @@ function all_users() {
     return $user;
 }
 
+function get_user_from_betgroup($betgroup_id) {
+    require("config.php");
+
+    $users = [];
+
+    $statement = $pdo->prepare("SELECT user_id FROM ".$db_name.".betgroup_user WHERE betgroup_id=:betgroup_id");
+    $statement->bindValue(':betgroup_id', $betgroup_id, PDO::PARAM_INT);
+    $statement->execute();
+
+    $user_ids = [];
+    foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $user) {
+        $user_ids[] = $user['user_id'];
+    }
+
+    foreach ($user_ids as $id) {
+        $statement = $pdo->prepare("SELECT * FROM ".$db_name.".user WHERE id = :id");
+        $statement->execute(array('id' => $id));
+        $users[$id] = $statement->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+    return $users;
+}
+
 
 
 function create_betgroup($name) {
@@ -277,6 +301,30 @@ function get_betgroups($ids) {
         $statement = $pdo->prepare("SELECT * FROM ".$db_name.".betgroup WHERE id = :id");
         $statement->execute(array('id' => $id));
         $betgroups[$id] = $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    return $betgroups;
+}
+
+function get_betgroups_from_user($user_id) {
+    require("config.php");
+
+    $betgroups = [];
+
+    $statement = $pdo->prepare("SELECT betgroup_id FROM ".$db_name.".betgroup_user WHERE user_id=:user_id");
+    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    $statement->execute();
+
+    $betgroup_ids = [];
+    foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $betgroup) {
+        $betgroup_ids[] = $betgroup['betgroup_id'];
+    }
+
+    foreach ($betgroup_ids as $id) {
+        $statement = $pdo->prepare("SELECT * FROM ".$db_name.".betgroup WHERE id = :id");
+        $statement->execute(array('id' => $id));
+        $betgroups[$id] = $statement->fetch(PDO::FETCH_ASSOC);
+
     }
 
     return $betgroups;
@@ -363,4 +411,6 @@ function check_betgroup_season($season_id, $betgroup_id) {
 
 //$name = "family";
 //var_dump(delete_betgroup(2));
+
+//var_dump(get_user_from_betgroup(1));
 ?>
