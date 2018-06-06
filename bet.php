@@ -297,6 +297,6 @@ function delete_betgroup_season($season_id, $betgroup_id) {
 //var_dump(sum_points_all_at_matchday(1,3));
 //var_dump(all_users());
 
-$name = "family";
+//$name = "family";
 //var_dump(delete_betgroup(2));
 ?>

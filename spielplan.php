@@ -35,8 +35,8 @@ if (trim($_POST["inputurl"]) !== "") {
     create_match($matchdaymenu, trim($_POST["inputurl"]));
 }
 
-if (trim($_POST["new_season_name"]) !== "") {
-    create_season(trim($_POST["new_season_name"]));
+if (trim($_POST["new_season_name"]) !== "" && trim($_POST["season_bet_type"]) !== "") {
+    create_season(trim($_POST["new_season_name"]), trim($_POST["season_bet_type"]));
 }
 
 if (trim($_POST["new_matchday_name"]) !== "") {
@@ -226,6 +226,23 @@ if ($is_admin) {
                 <input type="text" class="form-control" name="new_season_name" placeholder="Saison Name"
                        value="<?php echo $url; ?>">
                 <button type="submit" class="btn btn-primary">Submit</button>
+                <fieldset class="form-group">
+                    <legend class="col-form-label col-sm-2 pt-0">bettype</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_1" value="winner" checked>
+                            <label class="form-check-label" for="bet_type_1">Winner</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_2" value="result90">
+                            <label class="form-check-label" for="bet_type_2">Result 90'</label>
+                       </div>
+                       <div class="form-check">
+                            <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_3" value="result">
+                           <label class="form-check-label" for="bet_type_3">Result full time</label>
+                       </div>
+                   </div>
+                </fieldset>
             </form>
         </div>
         <?php

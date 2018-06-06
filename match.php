@@ -7,11 +7,12 @@
  */
 
 
-function create_season($name, $start_time=NULL) {
+function create_season($name, $bet_type, $start_time=NULL) {
     require("config.php");
 
-    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, start_time) VALUES (:name, FROM_UNIXTIME(:start_time))");
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, bet_type, start_time) VALUES (:name, :bet_type, FROM_UNIXTIME(:start_time))");
     $statement->bindValue(':name', $name, PDO::PARAM_STR);
+    $statement->bindValue(':bet_type', $bet_type, PDO::PARAM_STR);
     $statement->bindValue(':start_time', $start_time, PDO::PARAM_INT);
     $result = $statement->execute();
 
