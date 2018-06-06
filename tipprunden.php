@@ -110,7 +110,8 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
             if ($is_admin) {
                 $betgroupid = $row['id'];
-                echo "<td><button type='submit' class='btn btn-primary' name='delete$betgroupid' value='1'>Löschen</button></td>";
+                echo "<form action='$actual_link' method='post'>";
+                echo "<td><button type='submit' class='btn btn-primary' name='delete$betgroupid' value='1'>Löschen</button></td></form>";
                 }
             echo "</tr>";
         } ?>
