@@ -42,17 +42,30 @@ if ($matchdaymenu !== null) {
     }
     $md_matches = get_matches(get_match_ids($matchdaymenu));
 }
-foreach ($md_matches AS $row) {
-    $val = strval($_POST[$row['id']]);
-    if (trim($val) !== "") {
-        create_bet($userid, $row['id'],$val);
-        submitted_bet($userid, $row['id']);
+
+$bettype = get_season_bettype($seasonmenu);
+if ($bettype == 'winner') {
+    foreach ($md_matches AS $row) {
+        if (trim($_POST[$row['id']]) !== "") {
+            $val = array('winner' => $_POST[$row['id']]);
+            create_bet($userid, $row['id'], $val);
+            submitted_bet($userid, $row['id']);
+        }
+    }
+} else {
+    foreach ($md_matches AS $row) {
+        if (trim($_POST[$row['id'].'_home']) !== "" AND trim($_POST[$row['id'].'_guest']) !== "") {
+            $val = array('home' => (int) $_POST[$row['id'].'_home'], 'guest' => (int) $_POST[$row['id'].'_guest']);
+            create_bet($userid, $row['id'], $val);
+            submitted_bet($userid, $row['id']);
+        }
     }
 }
 
+
 foreach (all_users() AS $user) {
     foreach ($md_matches AS $match) {
-            check_points($user['id'],$match['id']);
+        check_points($user['id'],$match['id']);
     }
 }
 
@@ -200,16 +213,16 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                           </td>";
                 echo "<td>";
 
-                $season = get_season_bettype($seasonmenu);
-                if ($season['bet_type'] == 'winner') { //!!! bet INPUT ?>
+                if ($bettype == 'winner') { //!!! bet INPUT ?>
                     <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
                            list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
                         <?php if ($row['start'] < 0) {
                             echo "disabled";
                         } ?>>
-                <?php } elseif ($season['bet_type'] == 'result' OR $season['bet_type'] == 'result90') { ?>
-                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>' list='possibleBets' placeholder='' step='1' min='0' max='2' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
-                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>' list='possibleBets' placeholder='' step='1' min='0' max='2' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
+                <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
+                    <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
+                    :
+                    <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
                 <?php }
 
                 echo "</td>";
@@ -275,12 +288,24 @@ else {
             if ($bet === NULL){
                 echo "<td>-</td>";
             } else {
-                if ($row['winner'] === NULL) {
-                    echo "<td>" . $bet . "</td>";
-                } elseif ($bet == $row['winner']) {
-                    echo "<td><strong>" . $bet . " ✓</strong></td>";
+                if ($bettype == 'winner') {
+                    $betstring = ''.$bet['winner'];
                 } else {
-                    echo "<td>" . $bet . "</td>";
+                    $betstring = ''.$bet['home'].':'.$bet['guest'];
+                }
+
+                $bet_result = check_bet($row['winner'], $row['home_goals'], $row['guest_goals'], $bet);
+
+                if ($row['winner'] === NULL) {
+                    echo "<td>" . $betstring . "</td>";
+                } elseif ($bet_result == 'correct') {
+                    echo "<td><strong>" . $betstring . " ✓ (5)</strong></td>";
+                } elseif ($bet_result == 'difference') {
+                    echo "<td><strong>" . $betstring . " ✓ (3)</strong></td>";
+                } elseif ($bet_result == 'tendency') {
+                    echo "<td><strong>" . $betstring . " ✓</strong></td>";
+                } else {
+                    echo "<td>" . $betstring . "</td>";
                 }
             }
 

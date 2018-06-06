@@ -88,3 +88,7 @@ input.tippfeld {
   height: 100px;
 }
 
+.tippfeld_home, .tippfeld_guest {
+  width: 100px;
+  display: inline;
+}

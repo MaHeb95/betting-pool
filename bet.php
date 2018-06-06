@@ -26,11 +26,11 @@ function create_bet($user_id, $match_id, $bet) {
             $statement = $pdo->prepare("INSERT INTO ".$db_name.".bet (user_id, match_id, bet, time) VALUES (:user_id, :match_id, :bet, NOW())");
             $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
             $statement->bindValue(':match_id', $match_id, PDO::PARAM_INT);
-            $statement->bindValue(':bet', $bet, PDO::PARAM_INT);
+            $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
             $result = $statement->execute();
         } else {
             $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET bet=:bet, time=NOW() WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
-            $statement->bindValue(':bet', $bet, PDO::PARAM_INT);
+            $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
             $result = $statement->execute();
         }
     }
@@ -48,11 +48,11 @@ function admin_bet($user_id, $match_id, $bet) {
         $statement = $pdo->prepare("INSERT INTO ".$db_name.".bet (user_id, match_id, bet, time) VALUES (:user_id, :match_id, :bet, NOW())");
         $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $statement->bindValue(':match_id', $match_id, PDO::PARAM_INT);
-        $statement->bindValue(':bet', $bet, PDO::PARAM_INT);
+        $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
         $result = $statement->execute();
     } else {
         $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET bet=:bet, time=NOW() WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
-        $statement->bindValue(':bet', $bet, PDO::PARAM_INT);
+        $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
         $result = $statement->execute();
     }
     return $result;
@@ -68,12 +68,38 @@ function get_bet($user_id, $match_id) {
     if ($submitted) {
         $statement = $pdo->prepare("SELECT bet FROM " . $db_name . ".bet WHERE match_id ='" . $match_id . "' AND user_id ='" . $user_id . "'");
         $statement->execute();
-        $bet = (int) ($statement->fetch(PDO::FETCH_ASSOC)['bet']);
+        $bet = json_decode($statement->fetch(PDO::FETCH_ASSOC)['bet'], true);
 
         return $bet;
     } else {
         return NULL;
     }
+}
+
+function check_bet($winner, $home_goals, $guest_goals, $bet) {
+    if (array_key_exists('winner', $bet)) {
+        if ($winner == $bet['winner']) {
+            return 'tendency';
+        } else {
+            return 'wrong';
+        }
+    } elseif (array_key_exists('home', $bet) AND array_key_exists('guest', $bet)) {
+        if ($home_goals == $bet['home'] AND $guest_goals == $bet['guest']) {
+            return 'correct';
+        } elseif (($home_goals - $guest_goals) == ($bet['home'] - $bet['guest'])) {
+            return 'difference';
+        } elseif (sign($home_goals - $guest_goals) == sign($bet['home'] - $bet['guest'])) {
+            return 'tendency';
+        } else {
+            return 'wrong';
+        }
+    } else {
+        return NULL;
+    }
+}
+
+function sign($n) {
+    return ($n > 0) - ($n < 0);
 }
 
 function check_points($user_id, $match_id) {
@@ -83,35 +109,43 @@ function check_points($user_id, $match_id) {
     $statement->execute();
     $val = $statement->fetch(PDO::FETCH_ASSOC)['finished'];
     $finished = (int) $val;
+
     if ($finished == 0) {
         return False;
     } else {
-
-        $statement = $pdo->prepare("SELECT winner FROM ".$db_name.".match  WHERE id ='".$match_id."'");
+        $statement = $pdo->prepare("SELECT winner, home_goals, guest_goals FROM ".$db_name.".match  WHERE id ='".$match_id."'");
         $statement->execute();
-        $val = $statement->fetch(PDO::FETCH_ASSOC)['winner'];
-        $winner = (int) $val;
+        $val = $statement->fetch(PDO::FETCH_ASSOC);
+        $winner = (int) $val['winner'];
+        $home_goals = (int) $val['home_goals'];
+        $guest_goals = (int) $val['guest_goals'];
 
-        $statement = $pdo->prepare("SELECT bet FROM ".$db_name.".bet  WHERE match_id ='".$match_id."' AND user_id ='".$user_id."'");
-        $statement->execute();
-        $val = $statement->fetch(PDO::FETCH_ASSOC)['bet'];
-        $bet = (int) $val;
+        $bet = get_bet($user_id, $match_id);
 
         if ($val == null) {
             return false;
         }
 
-        if ($winner == $bet) {
-            $points = 1;
-            $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET points=:points WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
-            $statement->bindValue(':points', $points, PDO::PARAM_INT);
-            $result = $statement->execute();
-        } else {
-            $points = 0;
-            $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET points=:points WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
-            $statement->bindValue(':points', $points, PDO::PARAM_INT);
-            $result = $statement->execute();
+        switch (check_bet($winner, $home_goals, $guest_goals, $bet)) {
+            case 'correct':
+                $points = 5;
+                break;
+            case 'difference':
+                $points = 3;
+                break;
+            case 'tendency':
+                $points = 1;
+                break;
+            case 'wrong':
+                $points = 0;
+                break;
+            default:
+                return false;
         }
+
+        $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET points=:points WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
+        $statement->bindValue(':points', $points, PDO::PARAM_INT);
+        $result = $statement->execute();
     }
     return $result;
 }

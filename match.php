@@ -74,7 +74,7 @@ function get_season_bettype($id) {
 
     $statement = $pdo->prepare("SELECT bet_type FROM ".$db_name.".season WHERE id='".$id."'");
     $statement->execute();
-    $bettype = $statement->fetch(PDO::FETCH_ASSOC);
+    $bettype = $statement->fetch(PDO::FETCH_ASSOC)['bet_type'];
 
 
     return $bettype;

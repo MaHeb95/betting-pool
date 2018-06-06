@@ -231,15 +231,15 @@ if ($is_admin) {
                     <div class="col-sm-10">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_1" value="winner" checked>
-                            <label class="form-check-label" for="bet_type_1">Winner</label>
+                            <label class="form-check-label" for="bet_type_1">winner</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_2" value="result90">
-                            <label class="form-check-label" for="bet_type_2">Result 90'</label>
+                            <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_2" value="result_fulltime">
+                            <label class="form-check-label" for="bet_type_2">result after full-time</label>
                        </div>
                        <div class="form-check">
                             <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_3" value="result">
-                           <label class="form-check-label" for="bet_type_3">Result full time</label>
+                           <label class="form-check-label" for="bet_type_3">final result</label>
                        </div>
                    </div>
                 </fieldset>

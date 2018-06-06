@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `betting_pool`.`season` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL,
   `start_time` DATETIME NULL,
-  `bet_type` ENUM('winner', 'result', 'result90') NULL,
+  `bet_type` ENUM('winner', 'winner_fulltime', 'result', 'result_fulltime') NULL,
+  `settings` VARCHAR(255),
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -93,7 +94,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `betting_pool`.`bet` (
   `user_id` INT NOT NULL,
   `match_id` INT NOT NULL,
-  `bet` VARCHAR(45) NULL,
+  `bet` VARCHAR(255) NULL,
   `time` DATETIME NULL,
   `points` INT NULL,
   `submitted` TINYINT(1) NOT NULL DEFAULT 0,
