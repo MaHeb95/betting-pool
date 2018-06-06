@@ -315,7 +315,8 @@ else {
                 <div class='ansetzung-text'>". $row['home_team'] . " - " . $row['guest_team'] . "</div>
               </td>";
         if ($match['home_goals'] !== null) {
-            echo "<td>" . $row['home_goals'] . " - " . $row['guest_goals'] . "  |  <strong>" . $row['winner'] . "</strong></td>";
+            echo "<td>" . $row['home_goals'] . " - " . $row['guest_goals'];
+            if ($bettype == 'winner') { echo "|  <strong>" . $row['winner'] . "</strong></td>";}
         } else {
             echo "<td></td>";
         }
@@ -402,7 +403,7 @@ else {
     }
 
     echo '&nbsp;&nbsp;&nbsp;';
-    echo "<a href='http://$host_domain/create_pdf.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Drucken</a>";
+    echo "<a href='http://$host_domain/create_pdf.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true' hidden>Drucken</a>";
 }
 }
 elseif(count($md_matches) == 0 && $md_matches !== null) {

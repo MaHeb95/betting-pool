@@ -1,7 +1,6 @@
 <!doctype html >
 <html lang = "en" >
 
-<link href="/css/navbar.css" rel="stylesheet">
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -17,6 +16,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="tipps.php">Tippabgabe</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="tipps.php">Ranking</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="einstellungen.php">Settings</a>

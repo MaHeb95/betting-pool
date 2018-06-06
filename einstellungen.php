@@ -28,7 +28,7 @@ $is_admin = (bool) (get_user($userid)['admin']);
 <head>
 </head>
 <body>
-<?php //if ($is_admin) { ?>
+<?php if ($is_admin) { ?>
 
 <div class="jumbotron">
     <div class="container">
@@ -38,7 +38,7 @@ $is_admin = (bool) (get_user($userid)['admin']);
     </div>
 </div>
 
-<?php //} ?>
+<?php } ?>
 
 </body>
 </html>
