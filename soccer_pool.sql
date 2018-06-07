@@ -23,6 +23,7 @@ USE `betting_pool` ;
 CREATE TABLE IF NOT EXISTS `betting_pool`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(255) NOT NULL,
+  `displayname` VARCHAR(255),
   `email` VARCHAR(255) NULL,
   `password` VARCHAR(255) NOT NULL,
   `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
