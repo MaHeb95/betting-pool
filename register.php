@@ -60,8 +60,8 @@ if(isset($_GET['register'])) {
         $result = $statement->execute(array('username' => $username, 'password' => $password_hash));
 
         if($result) {
-            echo 'Du wurdest erfolgreich registriert. <a href="login.php">Zum Login</a>';
-            $showFormular = false;
+            echo 'User wurde erfolgreich registriert. <a href="einstellungen.php">Zu Settings!</a>';
+            $showFormular = true;
         } else {
             echo 'Beim Abspeichern ist leider ein Fehler aufgetreten<br>';
         }
