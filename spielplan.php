@@ -217,15 +217,14 @@ if(count($md_matches) > 0){
     echo "</table>";
     echo "</form>";
 
-
     echo "<form action='$actual_link' method='post'>";
     echo '&nbsp;&nbsp;&nbsp;';
-    echo "<a href='http://$host_domain/create_pdf_spielplan.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Drucken</a>";
+    echo "<a href='http://$host_domain/create_pdf_spielplan.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg' role='button' aria-pressed='true'>Drucken</a>";
     if($is_admin) {
         echo '&nbsp;&nbsp;&nbsp;';
-        echo "<button type='submit' value='Update' name='update' class='btn btn-primary btn-lg active'>Update</button>";
+        echo "<button type='submit' value='Update' name='update' class='btn btn-primary btn-lg'>Update</button>";
     }
-    echo "</form>";
+    echo "</form><br/>";
     if (isset($_POST['update'])) {
         foreach (get_match_ids($matchdaymenu) as $id) {
             update_match($id);
@@ -285,30 +284,33 @@ if ($is_admin) {
     if ($seasonmenu === null) {
         ?>
 
-        <div class="container">
+        <div class="jumbotron">
+            <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
-                <label for="inputurl">Neue Saison</label>
+                <h1 class="display-5">Neue Saison</h1>
+                <legend for="inputurl" class="col-form-label">Saison Name</legend>
                 <input type="text" class="form-control" name="new_season_name" placeholder="Saison Name"
                        value="<?php echo $url; ?>">
-                <button type="submit" class="btn btn-primary">Submit</button>
                 <fieldset class="form-group">
-                    <legend class="col-form-label col-sm-2 pt-0">bettype</legend>
-                    <div class="col-sm-10">
+                    <legend for="season_bet_type" class="col-form-label">Wettentyp</legend>
+                    <div class="col-sm-12">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_1" value="winner" checked>
-                            <label class="form-check-label" for="bet_type_1">winner</label>
+                            <label class="form-check-label" for="bet_type_1">Gewinner</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_2" value="result_fulltime">
-                            <label class="form-check-label" for="bet_type_2">result after full-time</label>
+                            <label class="form-check-label" for="bet_type_2">Ergebnis nach Regelspielzeit</label>
                        </div>
                        <div class="form-check">
                             <input class="form-check-input" type="radio" name="season_bet_type" id="bet_type_3" value="result">
-                           <label class="form-check-label" for="bet_type_3">final result</label>
+                           <label class="form-check-label" for="bet_type_3">Endergebnis (nach Verlängerung)</label>
                        </div>
                    </div>
                 </fieldset>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            </div>
         </div>
         <?php
     }
@@ -316,31 +318,37 @@ if ($is_admin) {
     if ($seasonmenu !== null AND $matchdaymenu === null) {
         ?>
 
+        <div class="jumbotron">
         <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
-                <label for="inputurl">Neuer Spieltag</label>
+                <h1 class="display-5">Neuer Spieltag</h1>
+                <label for="inputurl" class="col-form-label">Spieltag Name</label>
                 <input type="text" class="form-control" name="new_matchday_name" placeholder="Spieltag Name"
                        value="<?php echo $url; ?>">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
         </div>
+        </div>
 
-        <br/>
+        <div class="jumbotron">
         <div class="container">
-            <h1 class="display-5">Saisonwetten</h1>
 
 
 
             <form action="<?php echo $actual_link; ?>" method="post">
-                <label for="new_season_question_text">Neue Saisonwette</label>
+                <h1 class="display-5">Neue Saisonwette</h1>
+                <label for="new_season_question_text" class="col-form-label">Bezeichnung Wette</label>
                 <input type="text" class="form-control" name="new_season_question_text" placeholder="Saisonwette"
                        value="">
+                <label for="new_season_question_text" class="col-form-label">Startzeit (danach ist eine Tippabgabe nicht mehr möglich)</label>
                 <input type="datetime-local" class="form-control" name="new_season_question_start"
                        placeholder="Startzeit" value="">
+                <label for="new_season_question_text" class="col-form-label">Punkte</label>
                 <input type="number" class="form-control" name="new_season_question_points" placeholder="Punkte"
                        step="1" value="1">
                 <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
+        </div>
         </div>
         <?php
     }
@@ -348,13 +356,16 @@ if ($is_admin) {
     if ($md_matches !== null) {
         ?>
 
+        <div class="jumbotron">
         <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
-                <label for="inputurl">Neues Spiel</label>
+                <h1 class="display-5">Neues Spiel</h1>
+                <label for="inputurl" class="col-form-label">Spiel URL (z.B. von flashscore)</label>
                 <input type="text" class="form-control" name="inputurl" placeholder="Spiel URL"
                        value="<?php echo $url; ?>">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
+        </div>
         </div>
         <?php
     }
