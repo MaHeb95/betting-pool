@@ -19,6 +19,7 @@ require ("view.navbar.php");
 require ("config.php");
 require ("match.php");
 require ("bet.php"); //for get_user only
+require ("season_bet.php");
 
 $is_admin = (bool) (get_user($userid)['admin']);
 
@@ -43,6 +44,12 @@ if (trim($_POST["new_matchday_name"]) !== "") {
     create_matchday($seasonmenu, trim($_POST["new_matchday_name"]));
 }
 
+if (trim($_POST["new_season_question_text"]) !== "") {
+    $start_time = (trim($_POST["new_season_question_start"]) !== "" ? strtotime($_POST['new_season_question_start']) : NULL);
+    create_season_question($seasonmenu, trim($_POST["new_season_question_text"]), $start_time,
+        (int) trim($_POST["new_season_question_points"]));
+}
+
 $md_matches = null;
 if ($matchdaymenu !== null) {
     $md_matches = get_matches(get_match_ids($matchdaymenu));
@@ -57,6 +64,21 @@ if ($matchdaymenu !== null) {
         }
     }
     $md_matches = get_matches(get_match_ids($matchdaymenu));
+}
+
+$md_season_questions = null;
+if ($seasonmenu !== null) {
+    $md_season_questions = get_season_questions(get_season_question_ids($seasonmenu));
+    foreach (get_season_question_ids($seasonmenu) as $id) {
+        if (isset($_POST['delete_sq_'.$id])) {
+            delete_season_question($id);
+        }
+
+        if (isset($_POST['save_sq_'.$id])) {
+            update_season_question($id, trim($_POST['sq_result_'.$id]));
+        }
+    }
+    $md_season_questions = get_season_questions(get_season_question_ids($seasonmenu));
 }
 
 
@@ -213,6 +235,49 @@ if(count($md_matches) > 0){
 }
 elseif(count($md_matches) == 0 && $md_matches !== null) {
     echo "<p class='lead'><em>Keine Spiele gefunden.</em></p>";
+}
+
+if($seasonmenu !== null AND $matchdaymenu === null AND count($md_season_questions) > 0){
+?>
+<form action="<?php echo $actual_link; ?>" method="post">
+    <table class="table">
+        <thead class="thead-inverse">
+        <tr>
+            <th>Startzeit</th>
+            <th>Wette</th>
+            <th>Punkte</th>
+            <th>Ergebnis</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+<?php
+foreach($md_season_questions AS $row) {
+    echo "<tr>";
+    //echo "<td>" . $row['id'] . "</td>";
+    echo "<td>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+    echo "<td id='id".$row['id']."' class='ansetzung'>
+        <div class='ansetzung-text'>". $row['text'] . "</div>
+      </td>";
+
+    echo "<td align='center'>" . $row['points'] . "</td>";
+    $season_question_id = $row['id'];
+    $result = $row['result'];
+    if ($is_admin) {
+        echo "<td><input type='text' class='form-control' name='sq_result_$season_question_id' placeholder='$result'></td>";
+        echo "<td><button type='submit' class='btn btn-primary' name='save_sq_$season_question_id' value='1'>Speichern</button> ";
+        echo "<button type='submit' class='btn btn-primary' name='delete_sq_$season_question_id' value='1'>Löschen</button></td>";
+    } else {
+        echo "<td>$result</td>";
+        echo "<td></td>";
+    }
+    echo "</tr>";
+}
+echo "</tbody>";
+echo "</table>";
+#echo "<button type='submit' class='btn btn-primary' name='update_season_question' value='1'>Aktualisieren</button>";
+echo "</form>";
+
 }?>
 
 <?php
@@ -257,6 +322,24 @@ if ($is_admin) {
                 <input type="text" class="form-control" name="new_matchday_name" placeholder="Spieltag Name"
                        value="<?php echo $url; ?>">
                 <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <br/>
+        <div class="container">
+            <h1 class="display-5">Saisonwetten</h1>
+
+
+
+            <form action="<?php echo $actual_link; ?>" method="post">
+                <label for="new_season_question_text">Neue Saisonwette</label>
+                <input type="text" class="form-control" name="new_season_question_text" placeholder="Saisonwette"
+                       value="">
+                <input type="datetime-local" class="form-control" name="new_season_question_start"
+                       placeholder="Startzeit" value="">
+                <input type="number" class="form-control" name="new_season_question_points" placeholder="Punkte"
+                       step="1" value="1">
+                <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
         </div>
         <?php
