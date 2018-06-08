@@ -36,22 +36,25 @@ if(isset($errorMessage)) {
 }
 ?>
 <html>
-<body>
-<link href="/css/signin.css" rel="stylesheet">
-<div class="container">
+<body class="body-signin">
 
     <form class="form-signin" action="?login=1" method="post">
-        <h2 class="form-signin-heading">Bitte melde dich an</h2>
-        <label for="eingabefeldUsername" class="sr-only">Username</label>
-        <input type="text" id="eingabefeldUsername" class="form-control" placeholder="Username" required="" autofocus="" name="username">
-        <label for="eingabefeldPasswort" class="sr-only">Passwort</label>
-        <input type="password" id="eingabefeldPasswort" class="form-control" placeholder="Passwort" required="" name="password">
+        <div class="text-center mb-4">
+            <h2 class="h3 mb-3 font-weight-normal">Anmeldung</h2>
+        </div>
+        <div class="form-label-group">
+            <input type="text" id="eingabefeldUsername" class="form-control" placeholder="Username" required autofocus name="username">
+            <label for="eingabefeldUsername">Username</label>
+        </div>
+        <div class="form-label-group">
+            <input type="password" id="eingabefeldPasswort" class="form-control" placeholder="Passwort" required name="password">
+            <label for="eingabefeldPasswort">Passwort</label>
+        </div>
+
         <div class="checkbox">
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Abschicken">Anmelden</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
     </form>
-
-</div> <!-- /container -->
 
 <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
