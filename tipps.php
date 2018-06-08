@@ -147,7 +147,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     <fieldset>
         <div class="container">
             <div class="row justify-content-md-center">
-                <div class="col col-lg-3">
+                <div class="col-md-4">
                     <p class="bg">
                         <!-- <label for="season">Wähle eine Saison</label> <!-- Season SELECTION -->
                         <!--onChange event fired and function autoSubmit() is invoked-->
@@ -169,7 +169,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                     $matchdays = get_matchdays(get_matchday_ids($seasonmenu));
                     if (count($matchdays) > 0) {
                         ?>
-                        <div class="col col-lg-3">
+                        <div class="col-md-4">
                             <p class="bg">
                                 <!-- <label for="matchday">Wähle einen Spieltag</label> -->
                                 <select class="form-control" id="matchday" name="matchday" onchange="autoSubmit_matchday();">
@@ -186,7 +186,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                         <?php
                         $matches = get_match_ids($matchdaymenu);
                         if (count($matches) > 0) { ?>
-                            <div class="col col-lg-3">
+                            <div class="col-md-4">
                                 <p class="bg">
                                     <!-- <label for="betgroup">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
                                     <!--onChange event fired and function autoSubmit() is invoked-->
@@ -250,19 +250,27 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                             <div class='ansetzung-text'>" . $row['home_team'] . " - " . $row['guest_team'] . "</div>
                           </td>";
                 echo "<td>";
+                //echo "<div>";
 
                 if ($bettype == 'winner') { //!!! bet INPUT ?>
                     <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
                            list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
                         <?php if ($row['start'] < 0) {
                             echo "disabled";
+                        } else {
+                            echo "required";
                         } ?>>
                 <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
-                    <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
-                    :
-                    <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} ?>>
+                    <div class="input-group">
+                        <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">&nbsp;:&nbsp;</span>
+                        </div>
+                        <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
+                    </div>
                 <?php }
 
+                //echo "</div>";
                 echo "</td>";
                 echo "</tr>";
             } ?>

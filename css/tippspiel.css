@@ -65,6 +65,8 @@
 
 input.tippfeld {
   min-width: 45px;
+  max-width: 5em;
+  display: inline-block;
 }
 
 .tborder-t, .tr_sep, .tr_septablinie {
@@ -89,6 +91,6 @@ input.tippfeld {
 }
 
 .tippfeld_home, .tippfeld_guest {
-  width: 100px;
+  max-width: 5em;
   display: inline;
 }

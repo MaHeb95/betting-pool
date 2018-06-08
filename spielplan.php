@@ -283,14 +283,14 @@ echo "</form>";
 if ($is_admin) {
     if ($seasonmenu === null) {
         ?>
-
         <div class="jumbotron">
             <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
                 <h1 class="display-5">Neue Saison</h1>
-                <legend for="inputurl" class="col-form-label">Saison Name</legend>
-                <input type="text" class="form-control" name="new_season_name" placeholder="Saison Name"
-                       value="<?php echo $url; ?>">
+                <div class="form-label-group">
+                    <input id="new_season_name" type="text" class="form-control" name="new_season_name" placeholder="Saison Name">
+                    <label for="new_season_name">Saison Name</label>
+                </div>
                 <fieldset class="form-group">
                     <legend for="season_bet_type" class="col-form-label">Wettentyp</legend>
                     <div class="col-sm-12">
@@ -322,9 +322,10 @@ if ($is_admin) {
         <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
                 <h1 class="display-5">Neuer Spieltag</h1>
-                <label for="inputurl" class="col-form-label">Spieltag Name</label>
-                <input type="text" class="form-control" name="new_matchday_name" placeholder="Spieltag Name"
-                       value="<?php echo $url; ?>">
+                <div class="form-label-group">
+                    <input id="new_matchday_name" type="text" class="form-control" name="new_matchday_name" placeholder="Spieltag Name">
+                    <label for="new_matchday_name">Spieltag Name</label>
+                </div>
                 <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
         </div>
@@ -332,20 +333,23 @@ if ($is_admin) {
 
         <div class="jumbotron">
         <div class="container">
-
-
-
             <form action="<?php echo $actual_link; ?>" method="post">
                 <h1 class="display-5">Neue Saisonwette</h1>
-                <label for="new_season_question_text" class="col-form-label">Bezeichnung Wette</label>
-                <input type="text" class="form-control" name="new_season_question_text" placeholder="Saisonwette"
-                       value="">
-                <label for="new_season_question_text" class="col-form-label">Startzeit (danach ist eine Tippabgabe nicht mehr möglich)</label>
-                <input type="datetime-local" class="form-control" name="new_season_question_start"
-                       placeholder="Startzeit" value="">
-                <label for="new_season_question_text" class="col-form-label">Punkte</label>
-                <input type="number" class="form-control" name="new_season_question_points" placeholder="Punkte"
-                       step="1" value="1">
+                <div class="form-label-group">
+                    <input id="new_season_question_text" type="text" class="form-control"
+                           name="new_season_question_text" placeholder="Saisonwette">
+                    <label for="new_season_question_text">Bezeichnung Wette</label>
+                </div>
+                <div class="form-label-group">
+                    <input id="new_season_question_start" type="datetime-local" class="form-control"
+                           name="new_season_question_start" placeholder="Startzeit">
+                    <label for="new_season_question_start">Startzeit (danach ist eine Tippabgabe nicht mehr möglich)</label>
+                </div>
+                <div class="form-label-group">
+                    <input id="new_season_question_points" type="number" step="1" value="1" class="form-control"
+                           name="new_season_question_points" placeholder="Punkte">
+                    <label for="new_season_question_points">Punkte</label>
+                </div>
                 <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
         </div>
@@ -360,9 +364,11 @@ if ($is_admin) {
         <div class="container">
             <form action="<?php echo $actual_link; ?>" method="post">
                 <h1 class="display-5">Neues Spiel</h1>
-                <label for="inputurl" class="col-form-label">Spiel URL (z.B. von flashscore)</label>
-                <input type="text" class="form-control" name="inputurl" placeholder="Spiel URL"
-                       value="<?php echo $url; ?>">
+                <div class="form-label-group">
+                    <input id="inputurl" type="url" class="form-control"
+                           name="inputurl" placeholder="Spiel URL">
+                    <label for="inputurl">Spiel URL</label>
+                </div>
                 <button type="submit" class="btn btn-primary">Speichern</button>
             </form>
         </div>
