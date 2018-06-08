@@ -19,6 +19,7 @@ require ("view.navbar.php");
 require ("config.php");
 require ("match.php");
 require ("bet.php");
+require ("season_bet.php");
 
 $is_admin = (bool) (get_user($userid)['admin']);
 
@@ -66,6 +67,14 @@ if ($bettype == 'winner') {
     }
 }
 
+$md_season_questions = get_season_questions(get_season_question_ids($seasonmenu));
+foreach($md_season_questions AS $row) {
+    if (trim($_POST['season_question_bet' . $row['id']]) !== "") {
+        $val = $_POST['season_question_bet' . $row['id']];
+        create_season_bet($userid, $row['id'], $val);
+        //submitted_bet($userid, $row['id']);
+    }
+}
 
 foreach (all_users() AS $user) {
     foreach ($md_matches AS $match) {
@@ -213,6 +222,47 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
 
 <?php
+
+if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
+
+    <form action="<?php echo $actual_link; ?>" method="post">
+        <table class="table">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Startzeit</th>
+                    <th>Wette</th>
+                    <th>Punkte</th>
+                    <th>Tipp</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach($md_season_questions AS $row) {
+                echo "<tr>";
+                    //echo "<td>" . $row['id'] . "</td>";
+                    echo "<td>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+                    echo "<td id='id".$row['id']."' class='saison-tipp'>
+                    <div class='saison-tipp-text'>". $row['text'] . "</div>
+                    </td>";
+                    echo "<td align='center'>" . $row['points'] . "</td>";
+                    $season_question_id = $row['id'];
+                    $closed = is_season_question_started($row['id']);
+                    $result = $row['result'];
+                    $season_bet = get_season_bet($userid,$season_question_id);?>
+                    <td><input type="text" class="form-control" name="season_question_bet<?php echo $season_question_id; ?>" placeholder="<?php echo $season_bet; ?>"
+                       value="<?php echo $season_bet; ?>" <?php if ($closed == TRUE) {echo "disabled";} ?>></td>
+            <?php
+    echo "</tr>";
+} ?>
+            </tbody>
+
+        </table>
+        <div class='col-md-3 col-md-offset-9'>
+            <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+        </div>
+    </form>
+<?php }
+
 if(count($md_matches) > 0){
 
 if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
