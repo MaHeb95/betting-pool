@@ -9,7 +9,7 @@
 function create_season_question($season_id, $text="", $start_time=NULL, $points=NULL) {
     require("config.php");
 
-    // check if matchday_id exists
+    // check if season_id exists
     $statement = $pdo->prepare("SELECT * FROM ".$db_name.".season WHERE id = :id");
     $statement->execute(array('id' => $season_id));
     $season = $statement->fetch(PDO::FETCH_ASSOC);
@@ -79,6 +79,7 @@ function update_season_question($season_question_id, $result=NULL) {
     $statement->bindValue(':result', $result, PDO::PARAM_STR);
     $result = $statement->execute();
 
+
     //update points
     //foreach(all_users() AS $user) {
     //    check_points($user['id'],$season_question_id);
@@ -88,4 +89,78 @@ function update_season_question($season_question_id, $result=NULL) {
     return $result;
 
     // if finished, also call the function that gives points for this match
+}
+
+function create_season_bet($user_id, $season_question_id, $bet) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT start_time - NOW() FROM ".$db_name.".season_question WHERE id='".$season_question_id."'");
+    $statement->execute();
+    $val = $statement->fetch(PDO::FETCH_ASSOC)['start_time - NOW()'];
+    $start_time = (int) $val;
+    if ($start_time<0) {
+        return False;
+    }else {
+
+        $statement = $pdo->prepare("SELECT * FROM ".$db_name.".season_bet WHERE season_question_id='".$season_question_id."' AND user_id=".$user_id);
+        $statement->execute();
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+        if( ! $row)
+        {
+            $statement = $pdo->prepare("INSERT INTO ".$db_name.".season_bet (user_id, season_question_id, bet, time) VALUES (:user_id, :season_question_id, :bet, NOW())");
+            $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+            $statement->bindValue(':season_question_id', $season_question_id, PDO::PARAM_INT);
+            $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
+            $result = $statement->execute();
+        } else {
+            $statement = $pdo->prepare("UPDATE ".$db_name.".season_bet SET bet=:bet, time=NOW() WHERE season_question_id='".$season_question_id."' AND user_id=".$user_id);
+            $statement->bindValue(':bet', json_encode($bet), PDO::PARAM_STR);
+            $result = $statement->execute();
+        }
+    }
+    return $result;
+}
+
+
+function submitted_season_bet($user_id, $season_question_id) {
+    require ("config.php");
+
+    $submitted = 1;
+    $statement = $pdo->prepare("UPDATE ".$db_name.".season_bet SET submitted=:submitted WHERE  season_question_id='". $season_question_id."' AND user_id='".$user_id."'");
+    $statement->bindValue(':submitted', $submitted, PDO::PARAM_INT);
+    $result = $statement->execute();
+
+    return $result;
+}
+
+function get_season_bet($user_id, $season_question_id) {
+    require ("config.php");
+
+    /*$statement = $pdo->prepare("SELECT submitted FROM ".$db_name.".season_bet WHERE season_question_id='".$season_question_id."' AND user_id=". $user_id);
+    $statement->execute();
+    $submitted = (bool) ($statement->fetch(PDO::FETCH_ASSOC)['submitted']);
+
+    if ($submitted) {*/
+        $statement = $pdo->prepare("SELECT bet FROM " . $db_name . ".season_bet WHERE season_question_id='".$season_question_id."' AND user_id =" . $user_id);
+        $statement->execute();
+        $bet = json_decode($statement->fetch(PDO::FETCH_ASSOC)['bet'], true);
+
+        return $bet;
+    /*} else {
+        return NULL;
+    }*/
+}
+
+function is_season_question_started($season_question_id) {
+    require ("config.php");
+
+    $statement = $pdo->prepare("SELECT start_time - NOW() FROM ".$db_name.".season_question WHERE id='".$season_question_id."'");
+    $statement->execute();
+    $val = $statement->fetch(PDO::FETCH_ASSOC)['start_time - NOW()'];
+    $start_time = (int) $val;
+    if ($start_time<0) {
+        return TRUE;
+    }else {
+        return FALSE;
+    }
 }
