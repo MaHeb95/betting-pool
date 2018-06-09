@@ -76,23 +76,33 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 </div>
 <?php } ?>
 
+<?php if ($is_admin) { ?>
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-5">Nutzer erstellen</h1>
+            <p>Hier können Sie einen neuen Nutzer erstellen.</p>
+            <p><a class="btn btn-primary btn-lg" href="register.php" role="button">Nutzer erstellen »</a></p>
+        </div>
+    </div>
+<?php } ?>
+
 <div class="jumbotron">
     <div class="container">
         <h1 class="display-5">Passwort ändern</h1>
         <form class="form-change-password" action="<?php echo $actual_link; ?>" method="post">
-            <div class="form-group">
-                <label for="altesPasswort">Altes Passwort</label>
+            <div class="form-label-group">
                 <input type="password" id="altesPasswort" class="form-control" name="oldpassword" placeholder="Altes Passwort">
+                <label for="altesPasswort">Altes Passwort</label>
             </div>
-            <div class="form-group">
-                <label for="neuesPasswort">Neues Passwort</label>
+            <div class="form-label-group">
                 <input type="password" class="form-control" id="neuesPasswort" name="newpassword" placeholder="Neues Passwort">
+                <label for="neuesPasswort">Neues Passwort</label>
             </div>
-            <div class="form-group">
-                <label for="neuesPasswortwiederholen">Neues Passwort wiederholen</label>
+            <div class="form-label-group">
                 <input type="password" class="form-control" id="neuesPasswortwiederholen" name="newpassword2" placeholder="Neues Passwort wiederholen">
+                <label for="neuesPasswortwiederholen">Neues Passwort wiederholen</label>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Speichern</button>
         </form>
     </div>
 </div>

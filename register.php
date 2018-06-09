@@ -6,7 +6,17 @@
  * Time: 18:04
  */
 
-session_start();
+//Check Login
+require ("view.nologin.php");
+
+//Abfrage der Nutzer ID vom Login
+$userid = $_SESSION['userid'];
+
+//Ausgabe des internen Startfensters
+require ("view.header.php");
+require ("view.navbar.php");
+
+//session_start();
 require_once("config.php");
 
 //$pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'root');
@@ -70,8 +80,48 @@ if(isset($_GET['register'])) {
 
 if($showFormular) {
     ?>
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-5">Nutzer erstellen</h1>
+            <form action="?register=1" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="text" id="username" class="form-control" name="username" placeholder="Username" required>
+                            <label for="username">Username</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="text" id="displayname" class="form-control" name="displayname" placeholder="Anzeigename">
+                            <label for="displayname">Anzeigename</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-label-group">
+                    <input type="email" id="email" class="form-control" name="email" placeholder="Email">
+                    <label for="email">Email</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Passwort" required>
+                            <label for="password">Passwort</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-label-group">
+                            <input type="password" class="form-control" id="password-repeat" name="password-repeat" placeholder="Passwort wiederholen" required>
+                            <label for="password-repeat">Passwort wiederholen</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Speichern</button>
+            </form>
+        </div>
+    </div>
 
-    <form action="?register=1" method="post">
+    <!--<form action="?register=1" method="post">
         Username:<br>
         <input type="username" size="40" maxlength="250" name="username"><br><br>
 
@@ -82,7 +132,7 @@ if($showFormular) {
         <input type="password" size="40" maxlength="250" name="password2"><br><br>
 
         <input type="submit" value="Abschicken">
-    </form>
+    </form>-->
 
     <?php
 } //Ende von if($showFormular)
