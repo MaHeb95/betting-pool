@@ -163,7 +163,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                         <select class="form-control" id="season" name="season" onchange="autoSubmit_season();">
                             <option value="">-- Wähle eine Saison --</option>
                             <?php
-                            $seasons = get_seasons(get_season_ids());
+                            $seasons = get_seasons(get_season_ids($userid));
                             foreach ($seasons as $row) {
                                 echo ("<option value=\"{$row['id']}\" " . ($seasonmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
                             }
@@ -181,12 +181,13 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                         <div class="col-md-4">
                             <p class="bg">
                                 <!-- <label for="matchday">Wähle einen Spieltag</label> -->
-                                <select class="form-control" id="matchday" name="matchday" onchange="autoSubmit_matchday();">
+                                <select class="form-control" id="matchday" name="matchday"
+                                        onchange="autoSubmit_matchday();">
                                     <option value="">-- Wähle einen Spieltag --</option>
                                     <?php
                                     //POPULATE DROP DOWN WITH Matchday FROM A GIVEN Season
                                     foreach ($matchdays as $row) {
-                                        echo ("<option value=\"{$row['id']}\" " . ($matchdaymenu == $row['id'] ? "selected" : "") . ">{$row['name']}</option>");
+                                        echo("<option value=\"{$row['id']}\" " . ($matchdaymenu == $row['id'] ? "selected" : "") . ">{$row['name']}</option>");
                                     }
                                     ?>
                                 </select>
@@ -194,25 +195,29 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                         </div>
                         <?php
                         $matches = get_match_ids($matchdaymenu);
-                        if (count($matches) > 0) { ?>
+                    }?>
                             <div class="col-md-4">
                                 <p class="bg">
-                                    <!-- <label for="betgroup">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
+                                    <label for="betgroup" class="sr-only">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
                                     <!--onChange event fired and function autoSubmit() is invoked-->
                                     <select class="form-control" id="betgroup" name="betgroup" onchange="autoSubmit_betgroup();">
                                         <option value="">-- Wähle eine Tipprunde --</option>
                                         <?php
-                                        $betgroups = get_betgroups_from_user($userid);
+                                        $betgroups = get_betgroups_from_user($userid, $seasonmenu);
+
+                                        if (count($betgroups) == 1) {
+                                            $betgroupmenu = $betgroups[1]['id'];
+                                        }
+
                                         foreach ($betgroups as $row) {
                                             echo("<option value=\"{$row['id']}\" " . ($betgroupmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
                                         }
+
                                         ?>
                                     </select>
                                 </p>
                             </div>
                             <?php
-                        }
-                    }
                 }
                 ?>
             </div>

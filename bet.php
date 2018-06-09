@@ -126,15 +126,25 @@ function check_points($user_id, $match_id) {
             return false;
         }
 
+        $statement = $pdo->prepare("SELECT settings FROM ".$db_name.".season INNER JOIN matchday ON season.id = matchday.season_id INNER JOIN `match` ON matchday.id = `match`.matchday_id WHERE `match`.id='".$match_id."'");
+        $statement->execute();
+        $settings = json_decode($statement->fetch(PDO::FETCH_ASSOC)['settings']);
+
         switch (check_bet($winner, $home_goals, $guest_goals, $bet)) {
             case 'correct':
-                $points = 5;
+                if (array_key_exists('correct', $settings)) {
+                    $points = $settings['correct'];
+                }
                 break;
             case 'difference':
-                $points = 3;
+                if (array_key_exists('difference', $settings)) {
+                    $points = $settings['difference'];
+                }
                 break;
             case 'tendency':
-                $points = 1;
+                if (array_key_exists('tendency', $settings)) {
+                    $points = $settings['tendency'];
+                }
                 break;
             case 'wrong':
                 $points = 0;
@@ -306,13 +316,19 @@ function get_betgroups($ids) {
     return $betgroups;
 }
 
-function get_betgroups_from_user($user_id) {
+function get_betgroups_from_user($user_id, $season_id=NULL) {
     require("config.php");
 
     $betgroups = [];
 
-    $statement = $pdo->prepare("SELECT betgroup_id FROM ".$db_name.".betgroup_user WHERE user_id=:user_id");
-    $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    if ($season_id !== NULL) {
+        $statement = $pdo->prepare("SELECT betgroup_user.betgroup_id FROM ".$db_name.".betgroup_user INNER JOIN betgroup_season ON betgroup_user.betgroup_id=betgroup_season.betgroup_id WHERE user_id=:user_id AND season_id=:season_id");
+        $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    } else {
+        $statement = $pdo->prepare("SELECT betgroup_id FROM ".$db_name.".betgroup_user WHERE user_id=:user_id");
+        $statement->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+    }
     $statement->execute();
 
     $betgroup_ids = [];

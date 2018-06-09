@@ -7,12 +7,13 @@
  */
 
 
-function create_season($name, $bet_type, $start_time=NULL) {
+function create_season($name, $bet_type, $settings, $start_time=NULL) {
     require("config.php");
 
-    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, bet_type, start_time) VALUES (:name, :bet_type, FROM_UNIXTIME(:start_time))");
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, bet_type, settings, start_time) VALUES (:name, :bet_type, :settings FROM_UNIXTIME(:start_time))");
     $statement->bindValue(':name', $name, PDO::PARAM_STR);
     $statement->bindValue(':bet_type', $bet_type, PDO::PARAM_STR);
+    $statement->bindValue(':settings', json_encode($settings), PDO::PARAM_STR);
     $statement->bindValue(':start_time', $start_time, PDO::PARAM_INT);
     $result = $statement->execute();
 
@@ -41,10 +42,17 @@ function update_season_start_time($season_id) {
     $statement->execute();
 }
 
-function get_season_ids() {
+function get_season_ids($userid=NULL) {
     require("config.php");
 
-    $statement = $pdo->prepare("SELECT id FROM ".$db_name.".season ORDER BY start_time ASC, name ASC");
+    if ($userid !== NULL) {
+        $statement = $pdo->prepare("SELECT id FROM ".$db_name.".season INNER JOIN betgroup_season ON season.id=betgroup_season.season_id INNER JOIN betgroup_user ON betgroup_season.betgroup_id=betgroup_user.betgroup_id WHERE user_id=:user_id");
+        $statement->bindValue(':user_id', $userid, PDO::PARAM_INT);
+
+    } else {
+        $statement = $pdo->prepare("SELECT id FROM ".$db_name.".season ORDER BY start_time ASC, name ASC");
+    }
+
     $statement->execute();
 
     $id_list = [];
