@@ -11,14 +11,14 @@
             <li class="nav-item">
                 <a class="nav-link" href="spielplan.php">Spielplan</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" hidden>
                 <a class="nav-link" href="tabellen.php">Tabellen</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="tipps.php">Tippabgabe</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="rangliste.php">Ranking</a>
+                <a class="nav-link" href="ranking.php">Ranking</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="einstellungen.php">Settings</a>

@@ -201,12 +201,19 @@ function sum_points_matchday($user_id, $matchday) {
     return $points;
 }
 
-function sum_points_all($user_id) {
+function sum_points_all($user_id, $season_id=NULL) {
     require ("config.php");
 
-    $statement = $pdo->prepare("SELECT sum(points) FROM ".$db_name.".bet WHERE user_id=" . $user_id);
-    $statement->execute();
-    $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(points)'];
+    if ($season_id !== NULL) {
+        $statement = $pdo->prepare("SELECT sum(bet.points) FROM bet INNER JOIN `match` ON bet.match_id = `match`.id INNER JOIN matchday ON `match`.matchday_id = matchday.id WHERE `matchday`.season_id = :season_id AND user_id =" . $user_id);
+        $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+        $statement->execute();
+        $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(bet.points)'];
+    } else {
+        $statement = $pdo->prepare("SELECT sum(points) FROM bet WHERE user_id =" . $user_id);
+        $statement->execute();
+        $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(points)'];
+    }
     $points = (int) $val;
 
     return $points;
