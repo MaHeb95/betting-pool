@@ -128,7 +128,7 @@ function check_points($user_id, $match_id) {
 
         $statement = $pdo->prepare("SELECT settings FROM ".$db_name.".season INNER JOIN matchday ON season.id = matchday.season_id INNER JOIN `match` ON matchday.id = `match`.matchday_id WHERE `match`.id='".$match_id."'");
         $statement->execute();
-        $settings = json_decode($statement->fetch(PDO::FETCH_ASSOC)['settings']);
+        $settings = json_decode($statement->fetch(PDO::FETCH_ASSOC)['settings'], true);
 
         switch (check_bet($winner, $home_goals, $guest_goals, $bet)) {
             case 'correct':
