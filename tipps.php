@@ -316,7 +316,7 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                             echo "required";
                         } ?>>
                 <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
-                    <div class="input-group">
+                    <div class="input-group" style="max-width:11em; margin:auto">
                         <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
                         <div class="input-group-prepend">
                             <span class="input-group-text">&nbsp;:&nbsp;</span>
