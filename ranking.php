@@ -104,7 +104,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                                 $betgroups = get_betgroups_from_user($userid, $seasonmenu);
 
                                 if (count($betgroups) == 1) {
-                                    $betgroupmenu = $betgroups[1]['id'];
+                                    $betgroupmenu = (int) array_values($betgroups)[0]['id'];
                                 }
 
                                 foreach ($betgroups as $row) {
@@ -207,7 +207,6 @@ if ($seasonmenu !== NULL AND $betgroupmenu !== NULL) {
         <div class="container">
             <div class="align-content-center text-center" style="margin:auto">
                 <div id="chartContainer">FusionCharts XT will load here!</div>
-            </div>
             </div>
         </div>
     </div>

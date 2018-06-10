@@ -206,7 +206,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                                         $betgroups = get_betgroups_from_user($userid, $seasonmenu);
 
                                         if (count($betgroups) == 1) {
-                                            $betgroupmenu = $betgroups[1]['id'];
+                                            $betgroupmenu = (int) array_values($betgroups)[0]['id'];
                                         }
 
                                         foreach ($betgroups as $row) {
