@@ -66,8 +66,8 @@ if(isset($_GET['register'])) {
     if(!$error) {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $statement = $pdo->prepare("INSERT INTO user (username, password) VALUES (:username, :password)");
-        $result = $statement->execute(array('username' => $username, 'password' => $password_hash));
+        $statement = $pdo->prepare("INSERT INTO user (username, displayname, email, password) VALUES (:username, :displayname, :email, :password)");
+        $result = $statement->execute(array('username' => $username, 'displayname' => $_POST['displayname'], 'email' => $_POST['email'], 'password' => $password_hash));
 
         if($result) {
             echo 'User wurde erfolgreich registriert. <a href="einstellungen.php">Zu Settings!</a>';
