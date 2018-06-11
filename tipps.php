@@ -232,7 +232,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
 
     <form action="<?php echo $actual_link; ?>" method="post">
         <table class="table">
-            <thead class="thead-inverse">
+            <thead class="thead-dark">
                 <tr>
                     <th class="d-none d-sm-table-cell">Startzeit</th>
                     <th>Wette</th>
@@ -274,7 +274,7 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
 <form action="<?php echo $actual_link; ?>" method="post">
     <div class="table-responsive">
         <table class="table tippabgabe">
-            <thead class="thead-inverse">
+            <thead class="thead-dark">
             <tr>
                 <th class="d-none d-sm-table-cell">Anstoss</th>
                 <th>Ansetzung</th>
@@ -316,10 +316,10 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                             echo "required";
                         } ?>>
                 <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
-                    <div class="input-group" style="max-width:11em; margin:auto">
+                    <div class="input-group" style="max-width:11.2em; margin:auto">
                         <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
                         <div class="input-group-prepend">
-                            <span class="input-group-text">&nbsp;:&nbsp;</span>
+                            <span class="input-group-text" style="margin-right: -1px; margin-left: -1px; padding-left:0.5em; padding-right: 0.5em">:</span>
                         </div>
                         <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
                     </div>
@@ -347,7 +347,7 @@ else {
 ?>
 <div class="table-responsive">
 <table class="table">
-    <thead class="thead-inverse">
+    <thead class="thead-dark">
     <tr>
         <th class="d-none d-sm-table-cell">Anstoss</th>
         <th>Ansetzung</th>

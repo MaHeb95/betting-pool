@@ -192,7 +192,7 @@ if(count($md_matches) > 0){
     ?>
 <form action="<?php echo $actual_link; ?>" method="post">
 <table class="table">
-    <thead class="thead-inverse">
+    <thead class="thead-dark">
     <tr>
         <th>Anstoss</th>
         <th>Ansetzung</th>
@@ -255,7 +255,7 @@ if($seasonmenu !== null AND $matchdaymenu === null AND count($md_season_question
 ?>
 <form action="<?php echo $actual_link; ?>" method="post">
     <table class="table">
-        <thead class="thead-inverse">
+        <thead class="thead-dark">
         <tr>
             <th>Startzeit</th>
             <th>Wette</th>

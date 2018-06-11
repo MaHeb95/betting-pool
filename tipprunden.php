@@ -61,7 +61,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 
 <table class="table">
-    <thead class="thead-inverse">
+    <thead class="thead-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>
