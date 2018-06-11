@@ -12,7 +12,6 @@ require ("view.nologin.php");
 //Abfrage der Nutzer ID vom Login
 $userid = (int) $_SESSION['userid'];
 
-//Ausgabe des internen Startfensters
 require ("view.header.php");
 require ("view.navbar.php");
 
@@ -84,8 +83,7 @@ foreach (all_users() AS $user) {
 
 
 ?>
-<html>
-<head>
+
     <script type="text/javascript">
         /**
          * You can have a look at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with * for more information on with() function.
@@ -146,89 +144,85 @@ foreach (all_users() AS $user) {
             }
         }
     </script>
-</head>
-<body>
 <?php
 $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 
-<form class="form selector" id="form" name="form" method="get" action="<?php echo $actual_link; ?>">
-    <fieldset>
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col-md-4">
-                    <p class="bg">
-                        <!-- <label for="season">Wähle eine Saison</label> <!-- Season SELECTION -->
-                        <!--onChange event fired and function autoSubmit() is invoked-->
-                        <select class="form-control" id="season" name="season" onchange="autoSubmit_season();">
-                            <option value="">-- Wähle eine Saison --</option>
-                            <?php
-                            $seasons = get_seasons(get_season_ids($userid));
-                            foreach ($seasons as $row) {
-                                echo ("<option value=\"{$row['id']}\" " . ($seasonmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
-                            }
+    <form class="form selector" id="form" name="form" method="get" action="<?php echo $actual_link; ?>">
+        <fieldset>
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col-md-4">
+                        <p class="bg">
+                            <label for="season" class="sr-only">Wähle eine Saison</label> <!-- Season SELECTION -->
+                            <!--onChange event fired and function autoSubmit() is invoked-->
+                            <select class="form-control" id="season" name="season" onchange="autoSubmit_season();">
+                                <option value="">-- Wähle eine Saison --</option>
+                                <?php
+                                $seasons = get_seasons(get_season_ids($userid));
+                                foreach ($seasons as $row) {
+                                    echo ("<option value=\"{$row['id']}\" " . ($seasonmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
+                                }
+                                ?>
+                            </select>
+                        </p>
+                    </div>
+                    <?php
+                    //check whether Season was really selected and Season id is numeric
+                    if ($seasonmenu != '' && is_numeric($seasonmenu)) {
+                        //select sub-categories categories for a given Season id
+                        $matchdays = get_matchdays(get_matchday_ids($seasonmenu));
+                        if (count($matchdays) > 0) {
                             ?>
-                        </select>
-                    </p>
-                </div>
-                <?php
-                //check whether Season was really selected and Season id is numeric
-                if ($seasonmenu != '' && is_numeric($seasonmenu)) {
-                    //select sub-categories categories for a given Season id
-                    $matchdays = get_matchdays(get_matchday_ids($seasonmenu));
-                    if (count($matchdays) > 0) {
-                        ?>
-                        <div class="col-md-4">
-                            <p class="bg">
-                                <!-- <label for="matchday">Wähle einen Spieltag</label> -->
-                                <select class="form-control" id="matchday" name="matchday"
-                                        onchange="autoSubmit_matchday();">
-                                    <option value="">-- Wähle einen Spieltag --</option>
-                                    <?php
-                                    //POPULATE DROP DOWN WITH Matchday FROM A GIVEN Season
-                                    foreach ($matchdays as $row) {
-                                        echo("<option value=\"{$row['id']}\" " . ($matchdaymenu == $row['id'] ? "selected" : "") . ">{$row['name']}</option>");
-                                    }
-                                    ?>
-                                </select>
-                            </p>
-                        </div>
-                        <?php
-                        $matches = get_match_ids($matchdaymenu);
-                    }?>
                             <div class="col-md-4">
                                 <p class="bg">
-                                    <label for="betgroup" class="sr-only">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
-                                    <!--onChange event fired and function autoSubmit() is invoked-->
-                                    <select class="form-control" id="betgroup" name="betgroup" onchange="autoSubmit_betgroup();">
-                                        <option value="">-- Wähle eine Tipprunde --</option>
+                                    <label for="matchday" class="sr-only">Wähle einen Spieltag</label>
+                                    <select class="form-control" id="matchday" name="matchday"
+                                            onchange="autoSubmit_matchday();">
+                                        <option value="">-- Wähle einen Spieltag --</option>
                                         <?php
-                                        $betgroups = get_betgroups_from_user($userid, $seasonmenu);
-
-                                        if (count($betgroups) == 1) {
-                                            $betgroupmenu = (int) array_values($betgroups)[0]['id'];
+                                        //POPULATE DROP DOWN WITH Matchday FROM A GIVEN Season
+                                        foreach ($matchdays as $row) {
+                                            echo("<option value=\"{$row['id']}\" " . ($matchdaymenu == $row['id'] ? "selected" : "") . ">{$row['name']}</option>");
                                         }
-
-                                        foreach ($betgroups as $row) {
-                                            echo("<option value=\"{$row['id']}\" " . ($betgroupmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
-                                        }
-
                                         ?>
                                     </select>
                                 </p>
                             </div>
                             <?php
-                }
-                ?>
+                            $matches = get_match_ids($matchdaymenu);
+                        }?>
+                                <div class="col-md-4">
+                                    <p class="bg">
+                                        <label for="betgroup" class="sr-only">Wähle eine Tipprunde</label> <!-- betgroup SELECTION -->
+                                        <!--onChange event fired and function autoSubmit() is invoked-->
+                                        <select class="form-control" id="betgroup" name="betgroup" onchange="autoSubmit_betgroup();">
+                                            <option value="">-- Wähle eine Tipprunde --</option>
+                                            <?php
+                                            $betgroups = get_betgroups_from_user($userid, $seasonmenu);
+
+                                            if (count($betgroups) == 1) {
+                                                $betgroupmenu = (int) array_values($betgroups)[0]['id'];
+                                            }
+
+                                            foreach ($betgroups as $row) {
+                                                echo("<option value=\"{$row['id']}\" " . ($betgroupmenu == $row['id'] ? " selected" : "") . ">{$row['name']}</option>");
+                                            }
+
+                                            ?>
+                                        </select>
+                                    </p>
+                                </div>
+                                <?php
+                    }
+                    ?>
+                </div>
             </div>
-        </div>
-    </fieldset>
-</form>
-
-
+        </fieldset>
+    </form>
 <?php
-
-if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
+if ($seasonmenu !== null AND $matchdaymenu === null) {
+    ?>
 
     <form action="<?php echo $actual_link; ?>" method="post">
         <table class="table">
@@ -282,71 +276,71 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
 if(count($md_matches) > 0){
 
 if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
-<form action="<?php echo $actual_link; ?>" method="post">
-    <div class="table-responsive">
-        <table class="table tippabgabe">
-            <thead class="thead-dark">
-            <tr>
-                <th class="d-none d-sm-table-cell">Anstoss</th>
-                <th>Ansetzung</th>
+    <form action="<?php echo $actual_link; ?>" method="post">
+        <div class="table-responsive">
+            <table class="table tippabgabe">
+                <thead class="thead-dark">
+                <tr>
+                    <th class="d-none d-sm-table-cell">Anstoss</th>
+                    <th>Ansetzung</th>
+                    <?php
+                    $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
+                    $statement->execute();
+                    $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
+                    echo "<th>" . $user . "</th>";
+                    ?>
+                </tr>
+                </thead>
+                <tbody>
                 <?php
-                $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
-                $statement->execute();
-                $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
-                echo "<th>" . $user . "</th>";
-                ?>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach ($md_matches AS $row) {
-                echo "<tr>";
-                //echo "<td>" . $row['id'] . "</td>";
-                echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
-                echo "<style>
-                        #id" . $row['id'] . ".ansetzung:before {
-                            background-image: url(" . $row['home_logo'] . ");
-                        }
-                  
-                        #id" . $row['id'] . ".ansetzung:after {
-                            background-image: url(" . $row['guest_logo'] . ");
-                        }
-                        </style>";
-                echo "<td id='id" . $row['id'] . "' class='ansetzung'>
-                            <div class='ansetzung-text'>" . $row['home_team'] . " - " . $row['guest_team'] . "</div>
-                          </td>";
-                echo "<td>";
-                //echo "<div>";
+                foreach ($md_matches AS $row) {
+                    echo "<tr>";
+                    //echo "<td>" . $row['id'] . "</td>";
+                    echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+                    echo "<style>
+                            #id" . $row['id'] . ".ansetzung:before {
+                                background-image: url(" . $row['home_logo'] . ");
+                            }
+                      
+                            #id" . $row['id'] . ".ansetzung:after {
+                                background-image: url(" . $row['guest_logo'] . ");
+                            }
+                            </style>";
+                    echo "<td id='id" . $row['id'] . "' class='ansetzung'>
+                                <div class='ansetzung-text'>" . $row['home_team'] . " - " . $row['guest_team'] . "</div>
+                              </td>";
+                    echo "<td>";
+                    //echo "<div>";
 
-                if ($bettype == 'winner') { //!!! bet INPUT ?>
-                    <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
-                           list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
-                        <?php if ($row['start'] < 0) {
-                            echo "disabled";
-                        } else {
-                            echo "required";
-                        } ?>>
-                <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
-                    <div class="input-group" style="max-width:11.2em; margin:auto">
-                        <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" style="margin-right: -1px; margin-left: -1px; padding-left:0.5em; padding-right: 0.5em">:</span>
+                    if ($bettype == 'winner') { //!!! bet INPUT ?>
+                        <input type='number' class='form-control tippfeld' name='<?php echo $row['id']; ?>'
+                               list='possibleBets' placeholder='' step='1' min='0' max='2' value=''
+                            <?php if ($row['start'] < 0) {
+                                echo "disabled";
+                            } else {
+                                echo "required";
+                            } ?>>
+                    <?php } elseif ($bettype == 'result' OR $bettype == 'result_fulltime') { ?>
+                        <div class="input-group" style="max-width:11.2em; margin:auto">
+                            <input type='number' class='form-control tippfeld_home' name='<?php echo $row['id']; ?>_home' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="margin-right: -1px; margin-left: -1px; padding-left:0.5em; padding-right: 0.5em">:</span>
+                            </div>
+                            <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
                         </div>
-                        <input type='number' class='form-control tippfeld_guest' name='<?php echo $row['id']; ?>_guest' placeholder='' step='1' min='0' value='' <?php if ($row['start'] < 0) {echo "disabled";} else {echo "required";} ?>>
-                    </div>
-                <?php }
+                    <?php }
 
-                //echo "</div>";
-                echo "</td>";
-                echo "</tr>";
-            } ?>
-            </tbody>
-        </table>
-    </div>
-    <div class='col-md-3 col-md-offset-9'>
-        <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
-    </div>
-</form>
+                    //echo "</div>";
+                    echo "</td>";
+                    echo "</tr>";
+                } ?>
+                </tbody>
+            </table>
+        </div>
+        <div class='col-md-3 col-md-offset-9'>
+            <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+        </div>
+    </form>
     <script>
         function confirmFunction() {
             alert("Wollen Sie die Tipps endgültig abgeben?");
@@ -487,9 +481,4 @@ elseif(count($md_matches) == 0 && $md_matches !== null) {
     echo "<p class='lead'><em>Keine Spiele gefunden.</em></p>";
 }
 
-
-
-?>
-
-</body>
-</html>
+require('view.footer.php');

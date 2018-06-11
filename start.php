@@ -25,11 +25,6 @@ $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
 $betgroups = get_betgroups_from_user($userid);
 ?>
 
-<html>
-<head>
-</head>
-<body>
-
     <div class="jumbotron">
         <div class="container">
             <h1 class="display-5">Hallo <?php echo $user; ?>!</h1>
@@ -44,6 +39,5 @@ $betgroups = get_betgroups_from_user($userid);
             <p><a class="btn btn-primary btn-lg" href="tipps.php?season=1" role="button">WM-Tippspiel 2018 »</a></p>
         </div>
     </div>
-
-</body>
-</html>
+<?php
+require('view.footer.php');

@@ -1,8 +1,6 @@
 <?php
-require ("view.header.php");
+require("view.header.php");
 ?>
-
-<html>
 <body class="body-signin">
 <div class="container-fluid">
     <div class="parent">
@@ -11,5 +9,5 @@ require ("view.header.php");
         <p class="text-center"><a  class="btn  btn-primary"  href="login.php">Log in »</a></p>
     </div>
 </div>
-</body>
-</html >
+<?php
+require('view.footer.php');

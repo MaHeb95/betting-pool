@@ -55,14 +55,6 @@ if(trim($_POST["oldpassword"]) !== "") {
 }
 if(isset($errorMessage)) { echo $errorMessage; }
 
-
-?>
-<html>
-<head>
-</head>
-<body>
-
-<?php
 $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
 
@@ -107,5 +99,5 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     </div>
 </div>
 
-</body>
-</html>
+<?php
+require('view.footer.php');

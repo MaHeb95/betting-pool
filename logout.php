@@ -12,8 +12,6 @@ session_destroy();
 require ("view.header.php");
 ?>
 
-<html>
-<body>
 <div class="jumbotron">
     <div class="container">
         <h1 class="display-5">Logout erfolgreich!</h1>
@@ -22,6 +20,6 @@ require ("view.header.php");
         </form>
     </div> <!-- /container -->
 </div>
-</body>
-</html>
 
+<?php
+require('view.footer.php');

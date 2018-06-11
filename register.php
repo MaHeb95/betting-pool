@@ -20,15 +20,6 @@ require ("view.navbar.php");
 require_once("config.php");
 
 //$pdo = new PDO('mysql:host=localhost;dbname=test', 'root', 'root');
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Registrierung</title>
-</head>
-<body>
-
-<?php
 $showFormular = true; //Variable ob das Registrierungsformular anezeigt werden soll
 
 if(isset($_GET['register'])) {
@@ -136,7 +127,5 @@ if($showFormular) {
 
     <?php
 } //Ende von if($showFormular)
-?>
 
-</body>
-</html>
+require('view.footer.php');

@@ -10,7 +10,6 @@ session_start();
 if(!isset($_SESSION['userid'])) {
     require ("view.header.php");
     ?>
-    <html>
     <body class="body-signin">
     <div class="container-fluid">
         <div class="parent">
@@ -19,7 +18,7 @@ if(!isset($_SESSION['userid'])) {
             <p class="text-center"><a  class="btn  btn-primary"  href="login.php">Log in »</a></p>
         </div>
     </div>
-    </body>
-    </html>
-    <?php die();
+    <?php
+    require('view.footer.php');
+    die();
 }

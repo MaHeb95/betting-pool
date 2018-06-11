@@ -93,8 +93,6 @@ if ($seasonmenu !== null) {
 
 
 ?>
-<html>
-<head>
     <script type="text/javascript">
         /**
          * You can have a look at https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with * for more information on with() function.
@@ -127,8 +125,6 @@ if ($seasonmenu !== null) {
             }
         }
     </script>
-</head>
-<body>
 <?php
 $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
@@ -441,7 +437,5 @@ if ($is_admin) {
         <?php
     }
 }
-?>
 
-</body>
-</html>
+require('view.footer.php');

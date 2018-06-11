@@ -52,10 +52,6 @@ foreach (get_betgroup_ids() as $id) {
 
 }
 
-?>
-<html>
-<body>
-<?php
 $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
 ?>
@@ -138,5 +134,5 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     </form>
 </div>
 
-</body>
-</html>
+<?php
+require('view.footer.php');

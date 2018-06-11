@@ -35,7 +35,6 @@ if(isset($errorMessage)) {
     echo $errorMessage;
 }
 ?>
-<html>
 <body class="body-signin">
 
     <form class="form-signin" action="?login=1" method="post">
@@ -59,5 +58,5 @@ if(isset($errorMessage)) {
 <!-- IE10-Anzeigefenster-Hack für Fehler auf Surface und Desktop-Windows-8 -->
 <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 
-</body>
-</html>
+<?php
+require('view.footer.php');
