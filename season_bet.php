@@ -164,3 +164,16 @@ function is_season_question_started($season_question_id) {
         return FALSE;
     }
 }
+
+function is_season_question_submitted($user_id, $season_question_id) {
+    require ("config.php");
+
+    $statement = $pdo->prepare("SELECT submitted FROM ".$db_name.".season_bet WHERE season_question_id='".$season_question_id."' AND user_id=".$user_id);
+    $statement->execute();
+    $submitted = $statement->fetch(PDO::FETCH_ASSOC)['submitted'];
+    if ($submitted == 1) {
+        return TRUE;
+    }else {
+        return FALSE;
+    }
+}

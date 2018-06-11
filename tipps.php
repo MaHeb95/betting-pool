@@ -72,7 +72,7 @@ foreach($md_season_questions AS $row) {
     if (trim($_POST['season_question_bet' . $row['id']]) !== "") {
         $val = $_POST['season_question_bet' . $row['id']];
         create_season_bet($userid, $row['id'], $val);
-        //submitted_bet($userid, $row['id']);
+        submitted_season_bet($userid, $row['id']);
     }
 }
 
@@ -250,13 +250,19 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
                     <div class='saison-tipp-text'>". $row['text'] . "</div>
                     </td>";
                     echo "<td align='center'>" . $row['points'] . "</td>";
-                    $season_question_id = $row['id'];
                     $closed = is_season_question_started($row['id']);
-                    $result = $row['result'];
-                    $season_bet = get_season_bet($userid,$season_question_id);?>
-                    <td><input type="text" class="form-control" name="season_question_bet<?php echo $season_question_id; ?>" placeholder="<?php echo $season_bet; ?>"
-                       value="<?php echo $season_bet; ?>" <?php if ($closed == TRUE) {echo "disabled";} ?>></td>
-            <?php
+                    $season_bet = get_season_bet($userid,$row['id']);
+                    $submitted = is_season_question_submitted($userid,$row['id']);
+                    if ($submitted == FALSE AND $closed == FALSE) { ?>
+                        <td><input type="text" class="form-control" name="season_question_bet<?php echo $row['id']; ?>" placeholder="<?php echo $season_bet; ?>"
+                        value="<?php echo $season_bet; ?>" <?php if ($closed == TRUE OR $submitted == TRUE) {echo "disabled";} ?>></td>
+                    <?php } else {
+                        echo "<td>";
+                        foreach (get_user_from_betgroup($betgroupmenu) as $user) {
+                            echo "<p><b>" . $user['username'] . ":</b> " . get_season_bet($user['id'],$row['id']) . "</p>";
+                        }
+                        echo "</td>";
+                    }
     echo "</tr>";
 } ?>
             </tbody>
@@ -266,6 +272,11 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
             <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
         </div>
     </form>
+    <script>
+        function confirmFunction() {
+            alert("Wollen Sie die Tipps endgültig abgeben?");
+        }
+    </script>
 <?php }
 
 if(count($md_matches) > 0){
