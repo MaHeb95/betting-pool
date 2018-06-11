@@ -177,9 +177,23 @@ if ($seasonmenu !== NULL AND $betgroupmenu !== NULL) {
         FusionCharts.ready(function() {
             var revenueChart = new FusionCharts({
                 "type": "column2d",
-                "renderAt": "chartContainer",
+                "renderAt": "chart_current_points",
                 "width": "500",
                 "height": "300",
+                "dataFormat": "json",
+                "dataSource": <?php echo json_encode($chart_1, JSON_NUMERIC_CHECK); ?>
+
+            });
+            revenueChart.render();
+        })
+    </script>
+    <script type="text/javascript">
+        FusionCharts.ready(function() {
+            var revenueChart = new FusionCharts({
+                "type": "column2d",
+                "renderAt": "chart_current_points_xs",
+                "width": "300",
+                "height": "200",
                 "dataFormat": "json",
                 "dataSource": <?php echo json_encode($chart_1, JSON_NUMERIC_CHECK); ?>
 
@@ -205,8 +219,11 @@ if ($seasonmenu !== NULL AND $betgroupmenu !== NULL) {
     </div>
     <div class="jumbotron">
         <div class="container">
-            <div class="align-content-center text-center" style="margin:auto">
-                <div id="chartContainer">FusionCharts XT will load here!</div>
+            <div class="align-content-center text-center d-none d-sm-block" style="margin:auto">
+                <div id="chart_current_points">FusionCharts XT will load here!</div>
+            </div>
+            <div class="align-content-center text-center d-block d-sm-none" style="margin:auto">
+                <div id="chart_current_points_xs">FusionCharts XT will load here!</div>
             </div>
         </div>
     </div>

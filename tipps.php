@@ -234,7 +234,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
         <table class="table">
             <thead class="thead-inverse">
                 <tr>
-                    <th class="hidden-xs-down">Startzeit</th>
+                    <th class="d-none d-sm-table-cell">Startzeit</th>
                     <th>Wette</th>
                     <th>Punkte</th>
                     <th>Tipp</th>
@@ -245,7 +245,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) { ?>
             foreach($md_season_questions AS $row) {
                 echo "<tr>";
                     //echo "<td>" . $row['id'] . "</td>";
-                    echo "<td class='anstoss hidden-xs-down'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+                    echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
                     echo "<td id='id".$row['id']."' class='saison-tipp'>
                     <div class='saison-tipp-text'>". $row['text'] . "</div>
                     </td>";
@@ -276,7 +276,7 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
         <table class="table tippabgabe">
             <thead class="thead-inverse">
             <tr>
-                <th class="hidden-xs-down">Anstoss</th>
+                <th class="d-none d-sm-table-cell">Anstoss</th>
                 <th>Ansetzung</th>
                 <?php
                 $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
@@ -291,7 +291,7 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
             foreach ($md_matches AS $row) {
                 echo "<tr>";
                 //echo "<td>" . $row['id'] . "</td>";
-                echo "<td class='anstoss hidden-xs-down'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+                echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
                 echo "<style>
                         #id" . $row['id'] . ".ansetzung:before {
                             background-image: url(" . $row['home_logo'] . ");
@@ -349,7 +349,7 @@ else {
 <table class="table">
     <thead class="thead-inverse">
     <tr>
-        <th class="hidden-xs-down">Anstoss</th>
+        <th class="d-none d-sm-table-cell">Anstoss</th>
         <th>Ansetzung</th>
         <th>Ergebnis</th>
         <?php
@@ -364,7 +364,7 @@ else {
     foreach ($md_matches AS $row) {
         echo "<tr>";
         //echo "<td>" . $row['id'] . "</td>";
-        echo "<td class='anstoss hidden-xs-down'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
+        echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
         echo "<style>
             #id".$row['id'].".ansetzung:before {
                 background-image: url(". $row['home_logo'] .");
@@ -414,7 +414,7 @@ else {
         echo "</tr>";
     }
     echo "<tr class='active' >";
-    echo "<td class='summary hidden-xs-down'></td>";
+    echo "<td class='summary d-none d-sm-table-cell'></td>";
     echo "<td class='summary' colspan='2'>Punkte Spieltag:</td>";
         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
             echo "<td><strong>" . sum_points_matchday($user['id'],$matchdaymenu) . "</strong></td>";
@@ -422,7 +422,7 @@ else {
     echo "</tr>";
 
     echo "<tr class='active' >";
-    echo "<td class='summary hidden-xs-down'></td>";
+    echo "<td class='summary d-none d-sm-table-cell'></td>";
     echo "<td class='summary' colspan='2'>Punkte Gesamt:</td>";
 
     $user_ids = [];
@@ -451,7 +451,7 @@ else {
 
     // output the ranking
     echo "<tr class='active' >";
-    echo "<td class='summary hidden-xs-down'></td>";
+    echo "<td class='summary d-none d-sm-table-cell'></td>";
     echo "<td class='summary' colspan='2'>Platz:</td>";
 
     foreach (get_user_from_betgroup($betgroupmenu) as $user) {
