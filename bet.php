@@ -203,6 +203,7 @@ function sum_points_matchday($user_id, $matchday) {
 
 function sum_points_all($user_id, $season_id=NULL) {
     require ("config.php");
+    require ("season_bet.php");
 
     if ($season_id !== NULL) {
         $statement = $pdo->prepare("SELECT sum(bet.points) FROM bet INNER JOIN `match` ON bet.match_id = `match`.id INNER JOIN matchday ON `match`.matchday_id = matchday.id WHERE `matchday`.season_id = :season_id AND user_id =" . $user_id);
@@ -216,18 +217,28 @@ function sum_points_all($user_id, $season_id=NULL) {
     }
     $points = (int) $val;
 
+    // + Points from Season-Bets
+    $points_season_bet = (int) sum_season_bet_points_all($user_id, $season_id);
+    $points = $points + $points_season_bet;
+
     return $points;
 }
 
-function sum_points_all_at_matchday($user_id, $matchday) {
+function sum_points_all_at_matchday($user_id, $matchday_id, $season_id) {
     require ("config.php");
 
-    for ($i=$matchday; $i>0; $i--) {
+    for ($i=$matchday_id; $i>0; $i--) {
+
+        $statement = $pdo->prepare("SELECT season_id FROM " . $db_name . ".matchday WHERE id = ".$i);
+        $statement->execute();
+        $md_season = $statement->fetch(PDO::FETCH_ASSOC);
+        if($md_season['season_id'] == $season_id) {
 
         $statement = $pdo->prepare("SELECT sum(`bet`.points) FROM bet, `match` WHERE `match`.id = bet.match_id AND `match`.matchday_id= '".$i."'  AND user_id ='".$user_id."'");
         $statement->execute();
         $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(`bet`.points)'];
         $points = $points + (int) $val;
+        }
     }
     return $points;
 }
@@ -435,5 +446,5 @@ function check_betgroup_season($season_id, $betgroup_id) {
 //$name = "family";
 //var_dump(delete_betgroup(2));
 
-//var_dump(get_user_from_betgroup(1));
+//var_dump(sum_points_all(2,1));
 ?>

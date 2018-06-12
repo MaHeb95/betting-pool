@@ -59,7 +59,6 @@ if(isset($_GET['register'])) {
 
         $statement = $pdo->prepare("INSERT INTO user (username, displayname, email, password) VALUES (:username, :displayname, :email, :password)");
         $result = $statement->execute(array('username' => $username, 'displayname' => $_POST['displayname'], 'email' => $_POST['email'], 'password' => $password_hash));
-
         if($result) {
             echo 'User wurde erfolgreich registriert. <a href="einstellungen.php">Zu Settings!</a>';
             $showFormular = true;

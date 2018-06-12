@@ -177,3 +177,53 @@ function is_season_question_submitted($user_id, $season_question_id) {
         return FALSE;
     }
 }
+
+function check_season_bet_points($user_id, $season_question_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT result FROM ".$db_name.".season_question WHERE id=".$season_question_id);
+    $statement->execute();
+    $result = $statement->fetch(PDO::FETCH_ASSOC)['result'];
+
+    if (empty($result)) {
+        return False;
+    } else {
+
+        $statement = $pdo->prepare("SELECT bet FROM ".$db_name.".season_bet  WHERE user_id ='".$user_id."' AND season_question_id=".$season_question_id);
+        $statement->execute();
+        $bet = $statement->fetch(PDO::FETCH_ASSOC)['bet'];
+
+        if (empty($bet)) {
+            return False;
+        }
+
+        if (strpos($bet,$result)!==false) {
+            $statement = $pdo->prepare("SELECT points FROM ".$db_name.".season_question WHERE id=".$season_question_id);
+            $statement->execute();
+            $points = $statement->fetch(PDO::FETCH_ASSOC)['points'];
+
+            $statement = $pdo->prepare("UPDATE ".$db_name.".season_bet SET points=:points WHERE user_id ='".$user_id."' AND season_question_id=".$season_question_id);
+            $statement->bindValue(':points', $points, PDO::PARAM_INT);
+            $res = $statement->execute();
+
+            return $res;
+        } else {
+            return False;
+        }
+    }
+}
+
+function sum_season_bet_points_all($user_id, $season_id) {
+    require ("config.php");
+
+    $statement = $pdo->prepare("SELECT sum(season_bet.points) FROM season_bet INNER JOIN `season_question` ON season_bet.season_question_id = `season_question`.id  WHERE `season_question`.season_id = :season_id AND user_id =" . $user_id);
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->execute();
+    $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(season_bet.points)'];
+
+    $points = (int) $val;
+
+    return $points;
+}
+
+

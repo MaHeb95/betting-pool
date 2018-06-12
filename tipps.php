@@ -81,6 +81,12 @@ foreach (all_users() AS $user) {
     }
 }
 
+foreach (all_users() AS $user) {
+    foreach ($md_matches AS $match) {
+        check_season_bet_points();
+    }
+}
+
 
 ?>
 
@@ -253,7 +259,9 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
                     <?php } else {
                         echo "<td>";
                         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
-                            echo "<p><b>" . $user['username'] . ":</b> " . get_season_bet($user['id'],$row['id']) . "</p>";
+                            echo "<p><b>" . $user['username'] . ":</b> " . get_season_bet($user['id'],$row['id']);
+                            if (get_season_bet($user['id'],$row['id']) == $row['result']) { echo " ✓";}
+                            echo "</p>";
                         }
                         echo "</td>";
                     }
@@ -382,11 +390,12 @@ else {
         echo "<td id='id".$row['id']."' class='ansetzung'>
                 <div class='ansetzung-text'>". $row['home_team'] . " - " . $row['guest_team'] . "</div>
               </td>";
-        if ($match['home_goals'] !== null) {
-            echo "<td>" . $row['home_goals'] . " - " . $row['guest_goals'];
-            if ($bettype == 'winner') { echo "|  <strong>" . $row['winner'] . "</strong></td>";}
+        if ($row['home_goals'] !== null) {
+            echo "<td>" . $row['home_goals'] . " : " . $row['guest_goals'];
+            if ($bettype == 'winner') { echo "|  <strong>" . $row['winner'] . "</strong>";}
+            echo "</td>";
         } else {
-            echo "<td></td>";
+            echo "<td>- : -</td>";
         }
 
         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
@@ -407,9 +416,9 @@ else {
                 } elseif ($bet_result == 'correct') {
                     echo "<td><strong>" . $betstring . " ✓ (3)</strong></td>";
                 } elseif ($bet_result == 'difference') {
-                    echo "<td><strong>" . $betstring . " ✓ (2)</strong></td>";
+                    echo "<td><strong>" . $betstring . " ✓ (1)</strong></td>";
                 } elseif ($bet_result == 'tendency') {
-                    echo "<td><strong>" . $betstring . " ✓</strong></td>";
+                    echo "<td><strong>" . $betstring . " ✓ (1)</strong></td>";
                 } else {
                     echo "<td>" . $betstring . "</td>";
                 }
@@ -434,8 +443,8 @@ else {
     $total_points = [];
     foreach (get_user_from_betgroup($betgroupmenu) as $user) {
         $user_ids[] = $user['id'];
-        $total_points[] = sum_points_all_at_matchday($user['id'],$matchdaymenu);
-        echo "<td><strong>" . sum_points_all_at_matchday($user['id'],$matchdaymenu) . "</strong></td>";
+        $total_points[] = sum_points_all_at_matchday($user['id'],$matchdaymenu, $seasonmenu);
+        echo "<td><strong>" . sum_points_all_at_matchday($user['id'],$matchdaymenu, $seasonmenu) . "</strong></td>";
     }
     echo "</tr>";
 
