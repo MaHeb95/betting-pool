@@ -82,8 +82,8 @@ foreach (all_users() AS $user) {
 }
 
 foreach (all_users() AS $user) {
-    foreach ($md_matches AS $match) {
-        check_season_bet_points();
+    foreach ($md_season_questions AS $season_question) {
+        check_season_bet_points($user['id'], $season_question['id']);
     }
 }
 
