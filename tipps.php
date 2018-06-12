@@ -234,7 +234,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
         <table class="table">
             <thead class="thead-dark">
                 <tr>
-                    <th class="d-none d-sm-table-cell">Startzeit</th>
+                    <th class="d-none d-sm-table-cell">Abgabezeit</th>
                     <th>Wette</th>
                     <th>Punkte</th>
                     <th>Tipp</th>
