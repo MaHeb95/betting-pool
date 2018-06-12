@@ -458,5 +458,5 @@ function check_betgroup_season($season_id, $betgroup_id) {
 //$name = "family";
 //var_dump(delete_betgroup(2));
 
-var_dump(sum_points_all(2,1));
+//var_dump(sum_points_all(2,1));
 ?>
