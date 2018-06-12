@@ -213,17 +213,6 @@ function check_season_bet_points($user_id, $season_question_id) {
     }
 }
 
-function sum_season_bet_points_all($user_id, $season_id) {
-    require ("config.php");
 
-    $statement = $pdo->prepare("SELECT sum(season_bet.points) FROM season_bet INNER JOIN `season_question` ON season_bet.season_question_id = `season_question`.id  WHERE `season_question`.season_id = :season_id AND user_id =" . $user_id);
-    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
-    $statement->execute();
-    $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(season_bet.points)'];
-
-    $points = (int) $val;
-
-    return $points;
-}
 
 

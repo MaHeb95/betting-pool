@@ -201,9 +201,21 @@ function sum_points_matchday($user_id, $matchday) {
     return $points;
 }
 
+function sum_season_bet_points_all($user_id, $season_id) {
+    require ("config.php");
+
+    $statement = $pdo->prepare("SELECT sum(season_bet.points) FROM season_bet INNER JOIN `season_question` ON season_bet.season_question_id = `season_question`.id  WHERE `season_question`.season_id = :season_id AND user_id =" . $user_id);
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->execute();
+    $val = $statement->fetch(PDO::FETCH_ASSOC)['sum(season_bet.points)'];
+
+    $points = (int) $val;
+
+    return $points;
+}
+
 function sum_points_all($user_id, $season_id=NULL) {
     require ("config.php");
-    require ("season_bet.php");
 
     if ($season_id !== NULL) {
         $statement = $pdo->prepare("SELECT sum(bet.points) FROM bet INNER JOIN `match` ON bet.match_id = `match`.id INNER JOIN matchday ON `match`.matchday_id = matchday.id WHERE `matchday`.season_id = :season_id AND user_id =" . $user_id);
@@ -446,5 +458,5 @@ function check_betgroup_season($season_id, $betgroup_id) {
 //$name = "family";
 //var_dump(delete_betgroup(2));
 
-//var_dump(sum_points_all(2,1));
+var_dump(sum_points_all(2,1));
 ?>
