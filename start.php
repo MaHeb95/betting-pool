@@ -36,7 +36,7 @@ $betgroups = get_betgroups_from_user($userid);
             </h6>
             <h5><?php /*echo '&nbsp;'; */?></h5>-->
             <h6>Direkt zum Tippspiel der FIFA-Fußballweltmeisterschaft 2018 in Russland geht es hier entlang!<?php echo '&nbsp;'; ?> </h6>
-            <p><a class="btn btn-primary btn-lg" href="tipps.php?season=1" role="button">WM-Tippspiel 2018 »</a></p>
+            <p><a class="btn btn-primary btn-lg" href="tipps.php?season=2" role="button">WM-Tippspiel 2018 »</a></p>
         </div>
     </div>
 <?php

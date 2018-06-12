@@ -260,7 +260,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
                         echo "<td>";
                         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
                             echo "<p><b>" . $user['username'] . ":</b> " . get_season_bet($user['id'],$row['id']);
-                            if (get_season_bet($user['id'],$row['id']) == $row['result']) { echo " ✓";}
+                            if (get_season_bet($user['id'],$row['id']) == $row['result'] AND !empty(get_season_bet($user['id'],$row['id']))) { echo " ✓";}
                             echo "</p>";
                         }
                         echo "</td>";
