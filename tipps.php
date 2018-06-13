@@ -351,7 +351,7 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
     </form>
     <script>
         function confirmFunction() {
-            alert("Wollen Sie die Tipps endgültig abgeben?");
+            confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
 
