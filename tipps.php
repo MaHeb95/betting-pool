@@ -259,7 +259,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
                     <?php } else {
                         echo "<td>";
                         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
-                            echo "<p><b>" . $user['username'] . ":</b> " . get_season_bet($user['id'],$row['id']);
+                            echo "<p><b>" . $user['displayname'] . ":</b> " . get_season_bet($user['id'],$row['id']);
                             if (get_season_bet($user['id'],$row['id']) == $row['result'] AND !empty(get_season_bet($user['id'],$row['id']))) { echo " ✓";}
                             echo "</p>";
                         }
@@ -292,9 +292,9 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
                     <th class="d-none d-sm-table-cell">Anstoss</th>
                     <th>Ansetzung</th>
                     <?php
-                    $statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
+                    $statement = $pdo->prepare("SELECT displayname FROM " . $db_name . ".user WHERE id =" . $userid);
                     $statement->execute();
-                    $user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
+                    $user = $statement->fetch(PDO::FETCH_ASSOC)['displayname'];
                     echo "<th>" . $user . "</th>";
                     ?>
                 </tr>
@@ -367,7 +367,7 @@ else {
         <th>Ergebnis</th>
         <?php
         foreach (get_user_from_betgroup($betgroupmenu) as $row) {
-            echo "<th>" . $row['username'] . "</th>";
+            echo "<th>" . $row['displayname'] . "</th>";
         }
         ?>
     </tr>
