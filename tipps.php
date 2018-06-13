@@ -276,7 +276,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
     </form>
     <script>
         function confirmFunction() {
-            alert("Wollen Sie die Tipps endgültig abgeben?");
+            confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
 <?php }
