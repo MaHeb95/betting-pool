@@ -1,0 +1,16 @@
+{
+  "short_name": "Tippspiel",
+  "name": "Tippspiel",
+  "icons": [
+    {
+      "src": "img/Football.ico",
+      "type": "image/ico",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": "start.php",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#FFFFFF"
+}

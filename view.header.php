@@ -8,7 +8,10 @@
 
         <meta name="description" content="">
         <meta name="author" content="">
+
         <link rel="icon" href="img/Football.ico">
+        <link rel="manifest" href="manifest.json">
+
         <title>Tippspiel</title>
 
         <link rel='stylesheet' href='css/bootstrap.css'>
