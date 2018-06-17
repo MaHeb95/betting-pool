@@ -6,6 +6,8 @@
  * Time: 12:21
  */
 
+ob_start();
+
 //Check Login
 require ("view.nologin.php");
 
@@ -31,6 +33,35 @@ if (isset($_GET["season"]) && is_numeric($_GET["season"])) {
 if (isset($_GET['matchday']) && is_numeric($_GET['matchday'])) {
     $matchdaymenu = $_GET['matchday'];
 }
+
+function save_cookie($season_id=null, $matchday_id=null) {
+    $cookie = $season_id . ':' . $matchday_id . ':';
+    setcookie('view_prefs', $cookie, time()+60*60*24*365);
+}
+
+function load_cookie() {
+    $cookie = isset($_COOKIE['view_prefs']) ? $_COOKIE['view_prefs'] : '';
+    if ($cookie) {
+        list ($season_id, $matchday_id, $betgroup_id) = explode(':', $cookie);
+        if ($season_id == '') {
+            $season_id = null;
+        }
+        if ($matchday_id == '') {
+            $matchday_id = null;
+        }
+        return array($season_id, $matchday_id);
+    } else {
+        return array(null, null);
+    }
+}
+
+if ($seasonmenu === null) {
+    list($seasonmenu, $matchdaymenu) = load_cookie();
+} else {
+    save_cookie($seasonmenu, $matchdaymenu);
+}
+
+ob_end_flush();
 
 if (trim($_POST["inputurl"]) !== "") {
     create_match($matchdaymenu, trim($_POST["inputurl"]));

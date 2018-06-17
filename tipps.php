@@ -6,7 +6,10 @@
  * Time: 12:21
  */
 
+ob_start();
+
 //Check Login
+
 require ("view.nologin.php");
 
 //Abfrage der Nutzer ID vom Login
@@ -34,6 +37,38 @@ if (isset($_GET['matchday']) && is_numeric($_GET['matchday'])) {
 if (isset($_GET['betgroup']) && is_numeric($_GET['betgroup'])) {
     $betgroupmenu = $_GET['betgroup'];
 }
+
+function save_cookie($season_id=null, $matchday_id=null, $betgroup_id=null) {
+    $cookie = $season_id . ':' . $matchday_id . ':' . $betgroup_id;
+    setcookie('view_prefs', $cookie, time()+60*60*24*365);
+}
+
+function load_cookie() {
+    $cookie = isset($_COOKIE['view_prefs']) ? $_COOKIE['view_prefs'] : '';
+    if ($cookie) {
+        list ($season_id, $matchday_id, $betgroup_id) = explode(':', $cookie);
+        if ($season_id == '') {
+            $season_id = null;
+        }
+        if ($matchday_id == '') {
+            $matchday_id = null;
+        }
+        if ($betgroup_id == '') {
+            $betgroup_id = null;
+        }
+        return array($season_id, $matchday_id, $betgroup_id);
+    } else {
+        return array(null, null, null);
+    }
+}
+
+if ($seasonmenu === null) {
+    list($seasonmenu, $matchdaymenu, $betgroupmenu) = load_cookie();
+} else {
+    save_cookie($seasonmenu, $matchdaymenu, $betgroupmenu);
+}
+
+ob_end_flush();
 
 $md_matches = null;
 if ($matchdaymenu !== null) {
