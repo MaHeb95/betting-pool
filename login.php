@@ -7,6 +7,12 @@
  */
 session_start();
 require_once("config.php");
+require_once('libraries/authentication.php');
+
+if (remember_me()) {
+    header("Location: start.php");
+    exit();
+}
 
 if(isset($_GET['login'])) {
     $username = $_POST['username'];
@@ -18,9 +24,11 @@ if(isset($_GET['login'])) {
 
     //Überprüfung des Passworts
     if ($user !== false && password_verify($password, $user['password'])) {
-        $_SESSION['userid'] = $user['id'];
+        log_user_in($user['id']);
+        if ($_POST['remember-me'] == 1) {
+            persistent_login($user['id']);
+        }
         header("Location: start.php");
-        //echo "<a href='http://$host_domain/tipps.php' class='btn btn-primary' role='button' aria-pressed='true'>Zum Tippspiel</a>";
         exit();
     } else {
         $errorMessage = "Username oder Passwort war ungültig<br>";
@@ -50,7 +58,10 @@ if(isset($errorMessage)) {
             <label for="eingabefeldPasswort">Passwort</label>
         </div>
 
-        <div class="checkbox">
+        <div class="text-center checkbox mb-3">
+            <label>
+                <input name="remember-me" value="1" type="checkbox"> angemeldet bleiben
+            </label>
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Anmelden</button>
     </form>

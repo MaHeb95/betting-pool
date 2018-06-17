@@ -214,3 +214,10 @@ CREATE TABLE IF NOT EXISTS `betting_pool`.`betgroup_season` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS auth_token (
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  user_id INT NOT NULL,
+  token VARCHAR(512) NOT NULL,
+  CONSTRAINT auth_token_user_id_fk FOREIGN KEY (user_id) REFERENCES user (id))
+ENGINE = InnoDB;
