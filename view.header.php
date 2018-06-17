@@ -18,5 +18,6 @@
         <link rel='stylesheet' href='css/floating-labels.css'>
         <link rel='stylesheet' href='css/tippspiel.css'>
 
+        <link rel='stylesheet' href='css/navbar-top-fixed.css'>
     </head>
 <body>
