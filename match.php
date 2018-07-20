@@ -10,7 +10,7 @@
 function create_season($name, $bet_type, $settings, $start_time=NULL) {
     require("config.php");
 
-    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, bet_type, settings, start_time) VALUES (:name, :bet_type, :settings FROM_UNIXTIME(:start_time))");
+    $statement = $pdo->prepare("INSERT INTO ".$db_name.".season (name, bet_type, settings, start_time) VALUES (:name, :bet_type, :settings, FROM_UNIXTIME(:start_time))");
     $statement->bindValue(':name', $name, PDO::PARAM_STR);
     $statement->bindValue(':bet_type', $bet_type, PDO::PARAM_STR);
     $statement->bindValue(':settings', json_encode($settings), PDO::PARAM_STR);
@@ -75,6 +75,16 @@ function get_seasons($ids) {
     }
 
     return $seasons;
+}
+
+function get_seasonname($id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT name FROM ".$db_name.".season WHERE id =".$id);
+    $statement->execute();
+    $seasonname = $statement->fetch(PDO::FETCH_ASSOC);
+
+    return $seasonname;
 }
 
 function all_seasons() {
@@ -435,6 +445,6 @@ function parse_flashscore($url) {
 
 //var_dump(get_matches(get_match_ids(1)));
 
-//var_dump(get_seasons(2));
+//var_dump(get_seasonname(1));
 
 ?>
