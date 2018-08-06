@@ -18,9 +18,9 @@ require ("config.php");
 require ("match.php");
 require ("bet.php"); //for get_user only
 
-$statement = $pdo->prepare("SELECT username FROM " . $db_name . ".user WHERE id =" . $userid);
+$statement = $pdo->prepare("SELECT displayname FROM " . $db_name . ".user WHERE id =" . $userid);
 $statement->execute();
-$user = $statement->fetch(PDO::FETCH_ASSOC)['username'];
+$user = $statement->fetch(PDO::FETCH_ASSOC)['displayname'];
 
 $betgroups = get_betgroups_from_user($userid);
 ?>
@@ -35,8 +35,8 @@ $betgroups = get_betgroups_from_user($userid);
                 <?php /*echo '&nbsp;'; foreach ($betgroups AS $row) { echo $row['name']; echo ',&nbsp;'; } */?>
             </h6>
             <h5><?php /*echo '&nbsp;'; */?></h5>-->
-            <h6>Direkt zum Tippspiel der FIFA-Fußballweltmeisterschaft 2018 in Russland geht es hier entlang!<?php echo '&nbsp;'; ?> </h6>
-            <p><a class="btn btn-primary btn-lg" href="tipps.php?season=2" role="button">WM-Tippspiel 2018 »</a></p>
+            <h6>Direkt zum Tippspiel der Bundesliga-Saison 2018-2019 geht es hier entlang!<?php echo '&nbsp;'; ?> </h6>
+            <p><a class="btn btn-primary btn-lg" href="tipps.php?season=3" role="button">Bundesliga 2018-2019 »</a></p>
         </div>
     </div>
 <?php
