@@ -37,6 +37,9 @@ $betgroups = get_betgroups_from_user($userid);
             <h5><?php /*echo '&nbsp;'; */?></h5>-->
             <h6>Direkt zum Tippspiel der Bundesliga-Saison 2018-2019 geht es hier entlang!<?php echo '&nbsp;'; ?> </h6>
             <p><a class="btn btn-primary btn-lg" href="tipps.php?season=3" role="button">Bundesliga 2018-2019 »</a></p>
+            <h5><?php echo '&nbsp;'; ?></h5>
+            <h6>Direkt zum Tippspiel der Champions League-Saison 2018-2019 geht es hier entlang!<?php echo '&nbsp;'; ?> </h6>
+            <p><a class="btn btn-primary btn-lg" href="tipps.php?season=4" role="button">Champions League 2018-2019 »</a></p>
         </div>
     </div>
 <?php
