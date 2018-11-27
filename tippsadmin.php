@@ -198,7 +198,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     echo "<p></p>";
 
     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-    echo "<a href='http://$host_domain/tipps.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Zurück zur Tippübersicht!</a>";
+    echo "<a href='tipps.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Zurück zur Tippübersicht!</a>";
     ?>
 
     <script>

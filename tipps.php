@@ -517,7 +517,7 @@ else {
     echo"<div>";
     if ($is_admin) {
         echo '&nbsp;&nbsp;&nbsp;';
-        echo "<a href='http://$host_domain/tippsadmin.php?season=$seasonmenu&matchday=$matchdaymenu&betgroup=$betgroupmenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Tipps nachtragen</a>";
+        echo "<a href='tippsadmin.php?season=$seasonmenu&matchday=$matchdaymenu&betgroup=$betgroupmenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Tipps nachtragen</a>";
     }
 
     echo '&nbsp;&nbsp;&nbsp;';
