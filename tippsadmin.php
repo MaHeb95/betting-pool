@@ -29,11 +29,15 @@ if (!$is_admin) {
 
 $seasonmenu = null;
 $matchdaymenu = null;
+$betgroupmenu = null;
 if (isset($_GET["season"]) && is_numeric($_GET["season"])) {
     $seasonmenu = $_GET["season"];
 }
 if (isset($_GET['matchday']) && is_numeric($_GET['matchday'])) {
     $matchdaymenu = $_GET['matchday'];
+}
+if (isset($_GET['betgroup']) && is_numeric($_GET['betgroup'])) {
+    $betgroupmenu = $_GET['betgroup'];
 }
 
 $md_matches = null;
@@ -48,23 +52,28 @@ if ($matchdaymenu !== null) {
     $md_matches = get_matches(get_match_ids($matchdaymenu));
 }
 
-foreach (all_users() AS $user) {
-    foreach ($md_matches AS $match) {
-        $val = strval($_POST[$user['id'].$match['id']]);
-        if (trim($val) !== "") {
-            admin_bet($user['id'], $match['id'],$val);
-            submitted_bet($user['id'], $match['id']);
+$bettype = get_season_bettype($seasonmenu);
+if ($bettype == 'winner') {
+    foreach (get_user_from_betgroup($betgroupmenu) AS $user) {
+        foreach ($md_matches AS $match) {
+            if (trim($_POST[$user['id'].$match['id']]) !== "") {
+                $val = array('winner' => $_POST[$user['id'].$match['id']]);
+                admin_bet($user['id'], $match['id'],$val);
+                submitted_bet($user['id'], $match['id']);
+            }
+        }
+    }
+} else {
+    foreach (get_user_from_betgroup($betgroupmenu) AS $user) {
+        foreach ($md_matches AS $match) {
+            if (trim($_POST[$user['id'].$match['id'].'_home']) !== "" AND trim($_POST[$user['id'].$match['id'].'_guest']) !== "") {
+                $val = array('home' => (int) $_POST[$user['id'].$match['id'].'_home'], 'guest' => (int) $_POST[$user['id'].$match['id'].'_guest']);
+                admin_bet($user['id'], $match['id'],$val);
+                submitted_bet($user['id'], $match['id']);
+            }
         }
     }
 }
-
-
-foreach (all_users() AS $user) {
-    foreach ($md_matches AS $match) {
-        check_points($user['id'],$match['id']);
-    }
-}
-
 
 ?>
 <html>
@@ -100,6 +109,21 @@ foreach (all_users() AS $user) {
                 }
             }
         }
+
+        function autoSubmit_betgroup()
+        {
+            with (window.document.form) {
+                /**
+                 * We have if and else block where we check the selected index for Seasonegory(season) and * accordingly we change the URL in the browser.
+                 */
+                if (betgroup.selectedIndex === 0) {
+                    window.location.href = 'tipps.php?season=' + season.options[season.selectedIndex].value + '&matchday=' + matchday.options[matchday.selectedIndex].value;
+                } else {
+                    window.location.href = 'tipps.php?season=' + season.options[season.selectedIndex].value + '&matchday=' + matchday.options[matchday.selectedIndex].value + '&betgroup=' + betgroup.options[betgroup.selectedIndex].value;
+                }
+            }
+        }
+
     </script>
 </head>
 <body>
@@ -115,8 +139,8 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         <th style="text-align: center" colspan="1">Ergebnis</th>
         <?php
         $statement = ("SELECT * FROM " . $db_name . ".user ");
-        foreach (all_users() as $row) {
-            echo "<th style='text-align: center' colspan='1'>" . $row['username'] . "</th>";
+        foreach (get_user_from_betgroup($betgroupmenu) as $row) {
+            echo "<th style='text-align: center' colspan='1'>" . $row['displayname'] . "</th>";
         }
         ?>
     </tr>
@@ -134,26 +158,40 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         } else {
             echo "<td style='text-align: center' colspan='1'></td>";
         }
-        foreach (all_users() as $user) {
-                $bet = get_bet($user['id'],$match['id']);
-                ?>
+        foreach (get_user_from_betgroup($betgroupmenu) as $user) {
+            $bet = get_bet($user['id'], $match['id']);
+            /*if ($bet === NULL) {
+                echo "<td class='tippanzeige'>-</td>";
+            } else {*/
+                if ($bettype == 'winner') {
+                    $betstring = '' . $bet['winner'];
+                    ?>
                     <td style='text-align: center' colspan='1'>
                         <label for="<?php echo $user['id'].$match['id']; ?>"></label>
-                            <input type="number" size="1" class="form-control" name="<?php echo $user['id'].$match['id']; ?>" list="possibleBets" placeholder="<?php echo $bet; ?>" step="1" min="0" max="2" value="">
-                                <datalist id="possibleBets">
-                                    <option value="0">
-                                    <option value="1">
-                                    <option value="2">
-                                </datalist>
-                    </td>
-                <?php
+                            <input type="number" size="1" class="form-control" name="<?php echo $user['id'].$match['id']; ?>" list="possibleBets" placeholder="<?php echo $betstring; ?>" step="1" min="0" max="2" value="">
+                    </td> <?php
+                } else {
+                    $betstring_home = '' . $bet['home'];
+                    $betstring_guest = '' . $bet['guest'];
+                    ?>
+                    <td style='text-align: center' colspan='1'>
+                    <div class="input-group" style="max-width:11.2em; margin:auto">
+                            <input type='number' class='form-control tippfeld_home' name='<?php echo $user['id'].$match['id']; ?>_home' placeholder="<?php echo $betstring_home; ?>" step='1' min='0' value=''>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="margin-right: -1px; margin-left: -1px; padding-left:0.5em; padding-right: 0.5em">:</span>
+                            </div>
+                            <input type='number' class='form-control tippfeld_guest' name='<?php echo $user['id'].$match['id']; ?>_guest' placeholder="<?php echo $betstring_guest; ?>" step='1' min='0' value=''>
+                    </div>
+                    </td> <?php
+                }
+            //}   
         }
         echo "</tr>";
     }
     echo "</tbody>";
     echo "</table>";
     echo "<div class='col-md-3 col-md-offset-9'>";
-    echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary btn-lg active' name='submit_bets' value='1'>Tipps abgeben!</button>";
+    echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary btn-lg active' name='submit_bets' value='1'>Tipps ändern!</button>";
     echo "</div>";
     echo "</form>";
 

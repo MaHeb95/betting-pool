@@ -265,7 +265,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 if ($seasonmenu !== null AND $matchdaymenu === null) {
     ?>
 
-    <form action="<?php echo $actual_link; ?>" method="post">
+    <form action="<?php echo $actual_link; ?>" enctype="multipart/form-data" method="post">
         <table class="table">
             <thead class="thead-dark">
                 <tr>
@@ -319,7 +319,7 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
 if(count($md_matches) > 0){
 
 if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
-    <form action="<?php echo $actual_link; ?>" method="post">
+    <form action="<?php echo $actual_link; ?>" enctype="multipart/form-data" method="post">
         <div class="table-responsive">
             <table class="table tippabgabe">
                 <thead class="thead-dark">
@@ -392,9 +392,9 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
 
 <?php }
 else {
-?>
-<div class="table-responsive">
-<table class="table">
+    ?>
+    <div class="table-responsive">
+    <table class="table">
     <thead class="thead-dark">
     <tr>
         <th class="d-none d-sm-table-cell">Anstoss</th>
@@ -407,55 +407,57 @@ else {
         ?>
     </tr>
     </thead>
-    <tbody>
+    <div>
     <?php
     foreach ($md_matches AS $row) {
         echo "<tr>";
         //echo "<td>" . $row['id'] . "</td>";
         echo "<td class='anstoss d-none d-sm-table-cell'>" . date('d.m.Y - H:i', strtotime($row['start_time'])) . "</td>";
         echo "<style>
-            #id".$row['id'].".ansetzung:before {
-                background-image: url(". $row['home_logo'] .");
+            #id" . $row['id'] . ".ansetzung:before {
+                background-image: url(" . $row['home_logo'] . ");
             }
       
-            #id".$row['id'].".ansetzung:after {
-                background-image: url(". $row['guest_logo'] .");
+            #id" . $row['id'] . ".ansetzung:after {
+                background-image: url(" . $row['guest_logo'] . ");
             }
             </style>";
-        echo "<td id='id".$row['id']."' class='ansetzung'>
-                <div class='ansetzung-text'>". $row['home_team'] . " - " . $row['guest_team'] . "</div>
+        echo "<td id='id" . $row['id'] . "' class='ansetzung'>
+                <div class='ansetzung-text'>" . $row['home_team'] . " - " . $row['guest_team'] . "</div>
               </td>";
         if ($row['home_goals'] !== null) {
             echo "<td>" . $row['home_goals'] . " : " . $row['guest_goals'];
-            if ($bettype == 'winner') { echo "|  <strong>" . $row['winner'] . "</strong>";}
+            if ($bettype == 'winner') {
+                echo "|  <strong>" . $row['winner'] . "</strong>";
+            }
             echo "</td>";
         } else {
             echo "<td>- : -</td>";
         }
 
         foreach (get_user_from_betgroup($betgroupmenu) as $user) {
-            $bet = get_bet($user['id'],$row['id']);
-            if ($bet === NULL){
-                echo "<td>-</td>";
+            $bet = get_bet($user['id'], $row['id']);
+            if ($bet === NULL) {
+                echo "<td class='tippanzeige'>-</td>";
             } else {
                 if ($bettype == 'winner') {
-                    $betstring = ''.$bet['winner'];
+                    $betstring = '' . $bet['winner'];
                 } else {
-                    $betstring = ''.$bet['home'].':'.$bet['guest'];
+                    $betstring = '' . $bet['home'] . ':' . $bet['guest'];
                 }
 
                 $bet_result = check_bet($row['winner'], $row['home_goals'], $row['guest_goals'], $bet);
 
                 if ($row['winner'] === NULL) {
-                    echo "<td>" . $betstring . "</td>";
+                    echo "<td class='tippanzeige'>" . $betstring . "</td>";
                 } elseif ($bet_result == 'correct') {
-                    echo "<td><strong>" . $betstring . " ✓ (3)</strong></td>";
+                    echo "<td class='tippanzeige'><strong>" . $betstring . " ✓ (3)</strong></td>";
                 } elseif ($bet_result == 'difference') {
-                    echo "<td><strong>" . $betstring . " ✓ (1)</strong></td>";
+                    echo "<td class='tippanzeige'><strong>" . $betstring . " ✓ (1)</strong></td>";
                 } elseif ($bet_result == 'tendency') {
-                    echo "<td><strong>" . $betstring . " ✓ (1)</strong></td>";
+                    echo "<td class='tippanzeige'><strong>" . $betstring . " ✓ (1)</strong></td>";
                 } else {
-                    echo "<td>" . $betstring . "</td>";
+                    echo "<td class='tippanzeige'>" . $betstring . "</td>";
                 }
             }
 
@@ -465,9 +467,9 @@ else {
     echo "<tr class='active' >";
     echo "<td class='summary d-none d-sm-table-cell'></td>";
     echo "<td class='summary' colspan='2'>Punkte Spieltag:</td>";
-        foreach (get_user_from_betgroup($betgroupmenu) as $user) {
-            echo "<td><strong>" . sum_points_matchday($user['id'],$matchdaymenu) . "</strong></td>";
-        }
+    foreach (get_user_from_betgroup($betgroupmenu) as $user) {
+        echo "<td><strong>" . sum_points_matchday($user['id'], $matchdaymenu) . "</strong></td>";
+    }
     echo "</tr>";
 
     echo "<tr class='active' >";
@@ -478,20 +480,20 @@ else {
     $total_points = [];
     foreach (get_user_from_betgroup($betgroupmenu) as $user) {
         $user_ids[] = $user['id'];
-        $total_points[] = sum_points_all_at_matchday($user['id'],$matchdaymenu, $seasonmenu);
-        echo "<td><strong>" . sum_points_all_at_matchday($user['id'],$matchdaymenu, $seasonmenu) . "</strong></td>";
+        $total_points[] = sum_points_all_at_matchday($user['id'], $matchdaymenu, $seasonmenu);
+        echo "<td><strong>" . sum_points_all_at_matchday($user['id'], $matchdaymenu, $seasonmenu) . "</strong></td>";
     }
     echo "</tr>";
 
     // sort user ID's and total points by points descending
-    array_multisort($total_points,SORT_DESC, $user_ids);
+    array_multisort($total_points, SORT_DESC, $user_ids);
     // calculate the ranking
     $ranks = [];
     $last_score = null;
     $rows = 0;
     foreach ($user_ids as $index => $id) {
         $rows++;
-        if( $last_score !== $total_points[$index] ){
+        if ($last_score !== $total_points[$index]) {
             $last_score = $total_points[$index];
             $rank = $rows;
         }
@@ -512,17 +514,22 @@ else {
     echo "</table>";
     echo "</div>";
 
+    echo"<div>";
     if ($is_admin) {
         echo '&nbsp;&nbsp;&nbsp;';
-        echo "<a href='http://$host_domain/tippsadmin.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Tipps nachtragen</a>";
+        echo "<a href='http://$host_domain/tippsadmin.php?season=$seasonmenu&matchday=$matchdaymenu&betgroup=$betgroupmenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Tipps nachtragen</a>";
     }
 
     echo '&nbsp;&nbsp;&nbsp;';
-    echo "<a href='http://$host_domain/create_pdf.php?season=$seasonmenu&matchday=$matchdaymenu' class='btn btn-primary btn-lg active' role='button' aria-pressed='true' hidden>Drucken</a>";
+    echo "<a href='http://$host_domain/create_pdf.php?season=$seasonmenu&matchday=$matchdaymenu&betgroup=$betgroupmenu&user=$userid' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Drucken</a>";
+
+
 }
 }
 elseif(count($md_matches) == 0 && $md_matches !== null) {
     echo "<p class='lead'><em>Keine Spiele gefunden.</em></p>";
+
 }
+
 
 require('view.footer.php');
