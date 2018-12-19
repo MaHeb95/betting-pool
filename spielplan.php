@@ -251,7 +251,7 @@ if(count($md_matches) > 0){
         echo "<td align='center'>" . $row['home_goals'] . " - " . $row['guest_goals'] . "</td>";
         $match_id = $row['id'];
         if ($is_admin) {
-            echo "<td><button type='submit' class='btn btn-primary' name='delete$match_id' value='1'>Löschen</button></td>";
+            echo "<td><button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete$match_id' value='1'>Löschen</button></td>";
         }
         echo "</tr>";
     }
@@ -307,7 +307,7 @@ foreach($md_season_questions AS $row) {
     if ($is_admin) {
         echo "<td><input type='text' class='form-control' name='sq_result_$season_question_id' placeholder='$result'></td>";
         echo "<td><button type='submit' class='btn btn-primary' name='save_sq_$season_question_id' value='1'>Speichern</button> ";
-        echo "<button type='submit' class='btn btn-primary' name='delete_sq_$season_question_id' value='1'>Löschen</button></td>";
+        echo "<button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete_sq_$season_question_id' value='1'>Löschen</button></td>";
     } else {
         echo "<td>$result</td>";
         echo "<td></td>";
@@ -320,6 +320,12 @@ echo "</table>";
 echo "</form>";
 
 }?>
+
+<script>
+    function confirmDelete() {
+        return confirm("Wollen Sie das Spiel wirklich löschen?");
+    }
+</script>
 
 <?php
 if ($is_admin) {

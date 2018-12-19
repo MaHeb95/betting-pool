@@ -306,12 +306,12 @@ if ($seasonmenu !== null AND $matchdaymenu === null) {
 
         </table>
         <div class='col-md-3 col-md-offset-9'>
-            <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+            <button onclick='return confirmTippabgabe()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
         </div>
     </form>
     <script>
-        function confirmFunction() {
-            confirm("Wollen Sie die Tipps endgültig abgeben?");
+        function confirmTippabgabe() {
+            return confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
 <?php }
@@ -381,12 +381,12 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
             </table>
         </div>
         <div class='col-md-3 col-md-offset-9'>
-            <button onclick='confirmFunction()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+            <button onclick='return confirmTippabgabe()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
         </div>
     </form>
     <script>
-        function confirmFunction() {
-            confirm("Wollen Sie die Tipps endgültig abgeben?");
+        function confirmTippabgabe() {
+            return confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
 

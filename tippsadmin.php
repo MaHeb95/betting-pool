@@ -176,11 +176,11 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                     ?>
                     <td style='text-align: center' colspan='1'>
                     <div class="input-group" style="max-width:11.2em; margin:auto">
-                            <input type='number' class='form-control tippfeld_home' name='<?php echo $user['id'].$match['id']; ?>_home' placeholder="<?php echo $betstring_home; ?>" step='1' min='0' value=''>
+                            <input type='number' class='form-control tippfeld_home' name='<?php echo $user['id'].$match['id']; ?>_home' placeholder="<?php echo $betstring_home; ?>"  value=''>
                             <div class="input-group-prepend">
                                 <span class="input-group-text" style="margin-right: -1px; margin-left: -1px; padding-left:0.5em; padding-right: 0.5em">:</span>
                             </div>
-                            <input type='number' class='form-control tippfeld_guest' name='<?php echo $user['id'].$match['id']; ?>_guest' placeholder="<?php echo $betstring_guest; ?>" step='1' min='0' value=''>
+                            <input type='number' class='form-control tippfeld_guest' name='<?php echo $user['id'].$match['id']; ?>_guest' placeholder="<?php echo $betstring_guest; ?>"  value=''>
                     </div>
                     </td> <?php
                 }
@@ -191,7 +191,7 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     echo "</tbody>";
     echo "</table>";
     echo "<div class='col-md-3 col-md-offset-9'>";
-    echo "<button onclick='confirmFunction()' type='submit' class='btn btn-primary btn-lg active' name='submit_bets' value='1'>Tipps ändern!</button>";
+    echo "<button onclick='return confirmTippabgabe()' type='submit' class='btn btn-primary btn-lg active' name='submit_bets' value='1'>Tipps ändern!</button>";
     echo "</div>";
     echo "</form>";
 
@@ -202,8 +202,8 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     ?>
 
     <script>
-        function confirmFunction() {
-            alert("Wollen Sie die Tipps endgültig ändern?");
+        function confirmTippabgabe() {
+            return confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
 </body>
