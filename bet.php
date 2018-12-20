@@ -305,25 +305,21 @@ function update_user($id,$username,$displayname,$email,$password,$admin) {
 
     if ($user_id == TRUE) {
         if ($username !== "" and $username !== NULL) {
-            var_dump($username);
             $statement = $pdo->prepare("UPDATE ".$db_name.".user SET username=:username WHERE id='".$id."'");
             $statement->bindValue(':username', $username, PDO::PARAM_STR);
             $result = $statement->execute();
         }
         if ($displayname !== "" and $displayname !== NULL) {
-            var_dump($displayname);
             $statement = $pdo->prepare("UPDATE ".$db_name.".user SET displayname=:displayname WHERE id='".$id."'");
             $statement->bindValue(':displayname', $displayname, PDO::PARAM_STR);
             $result = $statement->execute();
         }
         if ($email !== "" and $email !== NULL) {
-            var_dump($email);
             $statement = $pdo->prepare("UPDATE ".$db_name.".user SET email=:email WHERE id='".$id."'");
             $statement->bindValue(':email', $email, PDO::PARAM_STR);
             $result = $statement->execute();
         }
         if ($password !== "" and $password !== NULL) {
-            var_dump($password);
             $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
             $statement = $pdo->prepare("UPDATE ".$db_name.".user SET password=:password WHERE id='".$id."'");

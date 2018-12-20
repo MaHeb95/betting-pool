@@ -32,7 +32,8 @@ if (isset($_GET["user"]) && is_numeric($_GET["user"])) {
     $usermenu = $_GET["user"];
 }
 
-if($usermenu !== null) {
+if(empty($_POST) == FALSE) {
+	
     $error = false;
     $password = $_POST['password'];
     $password2 = $_POST['password-repeat'];
@@ -42,10 +43,9 @@ if($usermenu !== null) {
 		$error = true;
     	}
     }
-    $admin = FALSE;
     if ($_POST['admin'] == 'on') {
     	$admin = TRUE;
-    } elseif ($_POST['admin'] == NULL) {
+    } else {
     	$admin = FALSE;
     }
     if(!$error) {
