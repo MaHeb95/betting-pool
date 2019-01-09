@@ -22,6 +22,7 @@ require ("config.php");
 require ("match.php");
 require ("bet.php");
 require ("season_bet.php");
+require ("tabellen.php");
 
 $is_admin = (bool) (get_user($userid)['admin']);
 
@@ -382,6 +383,8 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
         </div>
         <div class='col-md-3 col-md-offset-9'>
             <button onclick='return confirmTippabgabe()' type='submit' class='btn btn-primary' name='submit_bets' value='1'>Tipps abgeben!</button>
+            <!-- Button trigger modal-->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tabellen">Tabellen</button>
         </div>
     </form>
     <script>
@@ -389,6 +392,64 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
             return confirm("Wollen Sie die Tipps endgültig abgeben?");
         }
     </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="tabellen" tabindex="-1" role="dialog" aria-labelledby="tabellenTitle" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tabellenTitle">Tabellen</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <select class="form-control" id="league" name="league" onchange="selectLeague();">
+                <option selected disabled>Wähle eine Liga</option>
+                <?php foreach ($leagues AS $row)
+                    echo"<option value=".$row['Value'].">".$row['Name']."</option>";
+                ?>
+            </select>
+            <div id="selected_table_iframe">
+                
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+        function selectLeague() {
+
+            value = document.getElementById("league").value;
+
+            var leagues = <?php echo json_encode($leagues); ?>;
+            console.log(leagues[1]['Name']);
+
+            for (var i=1; i<10; i++) {
+                if (value == i) {
+                    var para = document.createElement("iframe");
+                    para.src = leagues[i]['Link'];
+                    para.height = leagues[i]['height'];
+                    para.width = leagues[i]['width'];
+                    para.frameborder = "0";
+                    para.scrolling = "no";
+
+                    var existingiframe = document.getElementById("selected_table_iframe").querySelector('iframe');
+                    if(existingiframe){
+                        document.getElementById("selected_table_iframe").replaceChild(para, existingiframe);
+                    } else {
+                        document.getElementById("selected_table_iframe").appendChild(para);
+                    }
+
+                }  
+            }
+        }
+    </script>
+
 
 <?php }
 else {
