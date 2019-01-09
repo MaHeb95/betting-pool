@@ -19,6 +19,7 @@ require ("view.navbar.php");
 require ("config.php");
 require ("match.php");
 require ("bet.php");
+require ("season_bet.php");
 
 
 
@@ -30,6 +31,7 @@ if (isset($_GET["season"]) && is_numeric($_GET["season"])) {
 if (isset($_GET['betgroup']) && is_numeric($_GET['betgroup'])) {
     $betgroupmenu = $_GET['betgroup'];
 }
+
 
 function save_cookie($season_id=null, $betgroup_id=null) {
     $cookie = $season_id . '::' . $betgroup_id;
@@ -412,11 +414,19 @@ if ($seasonmenu !== NULL AND $betgroupmenu !== NULL) {
         <div class="container">
             <div class="align-content-center text-center" style="margin:auto">
                 <h1>Rangliste</h1>
-
+                <h6>Name - Punktzahl
+                <?php if (check_season_question_in_season($seasonmenu) == TRUE) {
+                    echo " (Tippspiel/Zusatztipps)";
+                    }?>
+                </h6>
                 <ul class="list-unstyled">
                     <?php
                     foreach ($user_ids as $index => $user_id) {
-                        echo "<li><strong>" . $ranks[$user_id] . ". " . $user_names[$user_id] . "</strong> (". $total_points[$index] ." Punkte)</li>";
+                        echo "<li><strong>" . $ranks[$user_id] . ". " . $user_names[$user_id] . " - ". $total_points[$index] ." Punkte</strong>";
+                        if (check_season_question_in_season($seasonmenu) == TRUE) {
+                            $points_bets = sum_points_all($user_id,$seasonmenu) - sum_season_bet_points_all($user_id,$seasonmenu);
+                            echo "  (".$points_bets."/".sum_season_bet_points_all($user_id,$seasonmenu).")</li>";
+                        } else { echo"</li>"; }
                     }
                     ?>
                 </ul>
