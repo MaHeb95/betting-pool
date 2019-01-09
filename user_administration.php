@@ -121,8 +121,8 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 		} else {echo "<td></td>";}
 		echo "<td>";
 		$user_id = $user['id'];
-		echo "<button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete_$user_id' value='1'>Löschen</button>";
-		echo '&nbsp;&nbsp;&nbsp;';
+		/*echo "<button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete_$user_id' value='1'>Löschen</button>";
+		echo '&nbsp;&nbsp;&nbsp;';*/
 		$usermenu = $user['id'];
 		echo "<a href='user_update.php?user=$usermenu' class='btn btn-primary' role='button' aria-pressed='true'>Update</a>";
 		echo "</td>";
