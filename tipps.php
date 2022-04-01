@@ -450,7 +450,6 @@ if (check_matchday_submitted($userid,$matchdaymenu) !== TRUE) { ?>
         }
     </script>
 
-
 <?php }
 else {
     ?>

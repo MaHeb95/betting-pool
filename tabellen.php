@@ -15,12 +15,14 @@ $leagues[2] = array(
 	'height' => '870px',
 	'width' => '100%');
 
+
 $leagues[3] = array(
 	'Value' => 3,
 	'Name' => '3.Liga',
 	'Link' => 'https://www.sportschau.de/fussball/bundesliga3/spieltag/index.html#hrtabelle',
 	'height' => '850px',
 	'width' => '100%');
+
 
 $leagues[4] = array(
 	'Value' => 4,
@@ -36,10 +38,4 @@ $leagues[5] = array(
 	'height' => '860px',
 	'width' => '100%');
 
-$leagues[6] = array(
-	'Value' => 6,
-	'Name' => 'Seria A (Italien)',
-	'Link' => 'https://www.sportschau.de/fussball/international/italien/index.html#hrtabelle',
-	'height' => '880px',
-	'width' => '100%');
 
