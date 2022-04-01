@@ -156,6 +156,8 @@ function check_points($user_id, $match_id) {
         $statement = $pdo->prepare("UPDATE ".$db_name.".bet SET points=:points WHERE match_id='".$match_id."' AND user_id='".$user_id."'");
         $statement->bindValue(':points', $points, PDO::PARAM_INT);
         $result = $statement->execute();
+        
+
     }
     return $result;
 }
@@ -272,6 +274,78 @@ function all_users() {
     $user = $statement->fetchAll(PDO::FETCH_ASSOC);
 
     return $user;
+}
+
+function create_user($username,$displayname,$email,$password) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT * FROM user WHERE username = :username");
+    $result = $statement->execute(array('username' => $username));
+    $user = $statement->fetch();
+
+    if($user !== false) {
+        return false;
+    } else {
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $statement = $pdo->prepare("INSERT INTO user (username, displayname, email, password) VALUES (:username, :displayname, :email, :password)");
+        $result = $statement->execute(array('username' => $username, 'displayname' => $displayname, 'email' => $email, 'password' => $password_hash));
+        if($result) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function update_user($id,$username,$displayname,$email,$password,$admin) {
+    require("config.php");
+
+    $statement = $pdo->prepare("SELECT * FROM user WHERE id = :id");
+    $result = $statement->execute(array('id' => $id));
+    $user_id = $statement->fetch();
+
+    if ($user_id == TRUE) {
+        if ($username !== "" and $username !== NULL) {
+            $statement = $pdo->prepare("UPDATE ".$db_name.".user SET username=:username WHERE id='".$id."'");
+            $statement->bindValue(':username', $username, PDO::PARAM_STR);
+            $result = $statement->execute();
+        }
+        if ($displayname !== "" and $displayname !== NULL) {
+            $statement = $pdo->prepare("UPDATE ".$db_name.".user SET displayname=:displayname WHERE id='".$id."'");
+            $statement->bindValue(':displayname', $displayname, PDO::PARAM_STR);
+            $result = $statement->execute();
+        }
+        if ($email !== "" and $email !== NULL) {
+            $statement = $pdo->prepare("UPDATE ".$db_name.".user SET email=:email WHERE id='".$id."'");
+            $statement->bindValue(':email', $email, PDO::PARAM_STR);
+            $result = $statement->execute();
+        }
+        if ($password !== "" and $password !== NULL) {
+            $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+            $statement = $pdo->prepare("UPDATE ".$db_name.".user SET password=:password WHERE id='".$id."'");
+            $statement->bindValue(':password', $password_hash, PDO::PARAM_STR);
+            $result = $statement->execute();
+        }
+        
+        $statement = $pdo->prepare("UPDATE ".$db_name.".user SET admin=:admin WHERE id='".$id."'");
+        $statement->bindValue(':admin', $admin, PDO::PARAM_BOOL);
+        $result = $statement->execute();
+        
+        return true;
+    } else {
+        return false;
+    }
+}
+    
+
+function delete_user($user_id) {
+    require("config.php");
+
+    $statement = $pdo->prepare("DELETE FROM ".$db_name.".user WHERE id=:id");
+    $statement->bindValue(':id', $user_id, PDO::PARAM_INT);
+    return $statement->execute();
 }
 
 function get_user_from_betgroup($betgroup_id) {
@@ -459,4 +533,6 @@ function check_betgroup_season($season_id, $betgroup_id) {
 //var_dump(delete_betgroup(2));
 
 //var_dump(sum_points_all(2,1));
+
+//var_dump(update_user(17,"Test9","Test9","test@web.de","test9"));
 ?>

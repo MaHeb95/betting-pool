@@ -87,9 +87,9 @@ $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 <?php if ($is_admin) { ?>
     <div class="jumbotron">
         <div class="container">
-            <h1 class="display-5">Nutzer erstellen</h1>
-            <p>Hier können Sie einen neuen Nutzer erstellen.</p>
-            <p><a class="btn btn-primary btn-lg" href="register.php" role="button">Nutzer erstellen »</a></p>
+            <h1 class="display-5">Nutzer verwalten</h1>
+            <p>Hier können Sie Nutzer erstellen bzw verwalten.</p>
+            <p><a class="btn btn-primary btn-lg" href="user_administration.php" role="button">Nutzer verwalten »</a></p>
         </div>
     </div>
 <?php } ?>

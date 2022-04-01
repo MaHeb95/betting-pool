@@ -213,6 +213,17 @@ function check_season_bet_points($user_id, $season_question_id) {
     }
 }
 
+function check_season_question_in_season($season_id) {
+    require("config.php");
 
+    $statement = $pdo->prepare("SELECT * FROM ".$db_name.".season_question WHERE season_id=:season_id");
+    $statement->bindValue(':season_id', $season_id, PDO::PARAM_INT);
+    $statement->execute();
+    $row = $statement->fetch(PDO::FETCH_ASSOC);
 
+    if (!$row) { $result=FALSE; }
+    else { $result= TRUE; }
 
+    return $result;
+
+}

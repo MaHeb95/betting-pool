@@ -9,8 +9,8 @@
 //Tragt hier eure Verbindungsdaten zur Datenbank ein
 $db_host = 'localhost';
 $db_name = 'betting_pool';
-$db_user = 'betting-pool';
-$db_password = 'bets2018';
+$db_user = 'root';
+$db_password = 'root';
 $db_charset = 'utf8';
 
 /**
@@ -20,8 +20,8 @@ $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=$db_charset", $db_us
 
 $db = new mysqli($db_host,$db_user,$db_password,$db_name);
 
-define('SECRET_KEY', '17d81c75e70a92924e135e01cef60f39937a8f88aa00ec55baf105512a8ff6f8f3bfeb10a3377d308494645428ce1f0cb99c244ccd8eea1c386e5d8fb0ef8d773ad3ad7b26c1a7915154021863958718cfe37f84631f3aa1f926bf760c9cafdb5620d0a47624be5a402c0634a2b9b725fac18ef4f0f4cc31eac3b833a09bff3241e89e2b08c6ca63d1ccbd2713338dc388e9ab892aef48f3bfa4475292668904575ee71bfd3fd186dc4ff9677dec9c98db735c1ae2ff62dac0e869700af2f58ff493e517ba31bce0613848b64f95058f16ba37fb8753b7e25a139792ee8f6c4dcaf171bd6146a2e4591e514133e43da4eba6ca25483cbad679ba6ca45f6355f9');
+//define('SECRET_KEY', '114ba229215cb079d2eaa2852f3d8c22441290bdfa6175bfb0717d8ecca4e38f92e4c3a4e4beda3e053e594081ed1e545f5da966256da83e8021cf65ca91c6c51f68b56ba66008db585f0b565ceda7ad8e7ed18f71f7987908eca78facf0cdd6bc59e3bbbe2db57198b1563fc5c4f2e79d4369e78d3c815a58ec9a6a3cd3993bc2ce74f0dccb359bb9bbea5656443a691e6a63a881185a487d6c6a805ee5ac241b6e0d60492c75e6baaa607e0605796468c0260af669651d422245565827d77435533b6438a428b631a4e7beb0823909516dda0526045c1c6948d7172dae80ba53654c6fd955215ecce3b455d90bb57749a5e6ca0b7451c8a6dd79e9a69efa84');
 
-$host_domain = $_SERVER[HTTP_HOST];
+//$host_domain = $_SERVER[HTTP_HOST];
 
 require_once ('database.php');

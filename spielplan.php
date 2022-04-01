@@ -99,13 +99,17 @@ if ($matchdaymenu !== null) {
             delete_match($id);
         } else {
             $match = $md_matches[$id];
-            if (((int)$match['start'] < 0) && (!isset($match['home_goals']) || !isset($match['guest_goals']))) {
+            if (((int)$match['start'] < 0) && ($match['finished'] !== 1)) {
                 update_match($id);
             }
         }
     }
     $md_matches = get_matches(get_match_ids($matchdaymenu));
 }
+
+/*foreach (get_match_ids($matchdaymenu) as $id) {
+    update_match($id);
+}*/
 
 $md_season_questions = null;
 if ($seasonmenu !== null) {
@@ -248,10 +252,12 @@ if(count($md_matches) > 0){
                 <div class='ansetzung-text'>". $row['home_team'] . " - " . $row['guest_team'] . "</div>
               </td>";
 
-        echo "<td align='center'>" . $row['home_goals'] . " - " . $row['guest_goals'] . "</td>";
+        echo "<td ";
+        if ($row['finished']==FALSE && $row['home_goals']!=NULL) { echo "style='color:#BD0E0E'";}
+        echo "align='center'>" . $row['home_goals'] . " - " . $row['guest_goals'] . "</td>";
         $match_id = $row['id'];
         if ($is_admin) {
-            echo "<td><button type='submit' class='btn btn-primary' name='delete$match_id' value='1'>Löschen</button></td>";
+            echo "<td><button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete$match_id' value='1'>Löschen</button></td>";
         }
         echo "</tr>";
     }
@@ -307,7 +313,7 @@ foreach($md_season_questions AS $row) {
     if ($is_admin) {
         echo "<td><input type='text' class='form-control' name='sq_result_$season_question_id' placeholder='$result'></td>";
         echo "<td><button type='submit' class='btn btn-primary' name='save_sq_$season_question_id' value='1'>Speichern</button> ";
-        echo "<button type='submit' class='btn btn-primary' name='delete_sq_$season_question_id' value='1'>Löschen</button></td>";
+        echo "<button onclick='return confirmDelete()' type='submit' class='btn btn-primary' name='delete_sq_$season_question_id' value='1'>Löschen</button></td>";
     } else {
         echo "<td>$result</td>";
         echo "<td></td>";
@@ -320,6 +326,12 @@ echo "</table>";
 echo "</form>";
 
 }?>
+
+<script>
+    function confirmDelete() {
+        return confirm("Wollen Sie das Spiel wirklich löschen?");
+    }
+</script>
 
 <?php
 if ($is_admin) {
